@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Encrypt365:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Encrypt365_jar</output-path>
+    <root id="archive" name="Encrypt365.jar">
+      <element id="module-output" name="Encrypt365" />
+      <element id="extracted-dir" path="G:/apache-maven-3.5.0/maven_repository/commons-codec/commons-codec/1.15/commons-codec-1.15.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
