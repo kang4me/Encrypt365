@@ -3,6 +3,7 @@ com\kang\service\Md5Encrypt.class
 com\kang\service\BaseEncrypt.class
 com\kang\service\Md5EncryptApi.class
 com\kang\view\AesUI.class
+com\kang\config\ConfigFile.class
 com\kang\Encrypt365_Main.class
 com\kang\view\AesUI$2.class
 com\kang\view\BaseUI.class
