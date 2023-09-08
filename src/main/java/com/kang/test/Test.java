@@ -16,11 +16,10 @@ import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import org.apache.commons.codec.binary.Base64;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -38,27 +37,22 @@ public class Test {
 //        AesEncryptImpl aes_encrypt = new AesEncryptImpl(aes_entity);
 //        System.out.println(new String(Base64.encodeBase64(aes_encrypt.AES_Encrypt_all())));
 //    }
-public static void main(String[] args) {
-    Properties prop = new Properties();
-    try{
-        //读取属性文件a.properties
-        InputStream in = new BufferedInputStream(new FileInputStream("config.properties"));
-        prop.load(in);     ///加载属性列表
-        Iterator<String> it=prop.stringPropertyNames().iterator();
-        while(it.hasNext()){
-            String key=it.next();
-            System.out.println(key+":"+prop.getProperty(key));
+    public static void main(String[] args) {
+        Properties prop = new Properties();
+        try{
+            //读取属性文件a.properties
+            InputStream in = new BufferedInputStream (new FileInputStream("Encrypt365.properties"));
+            prop.load(in);     ///加载属性列表
+            Iterator<String> it=prop.stringPropertyNames().iterator();
+            Map<String,String> map = new HashMap<>();
+            for (String s : prop.stringPropertyNames()) {
+                map.put(s,prop.getProperty(s));
+            }
+            System.out.println(map.get("key"));
+            in.close();
         }
-        in.close();
-
-        ///保存属性到b.properties文件
-        FileOutputStream oFile = new FileOutputStream("config.properties", true);//true表示追加打开
-        prop.setProperty("phone", "10086");
-        prop.store(oFile, "The New properties file");
-        oFile.close();
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
-    catch(Exception e){
-        System.out.println(e);
-    }
-}
 }

@@ -42,7 +42,7 @@ public class BaseUI {
         });
     }
 
-    private void encode_Button(){
+    private void encode_Button() {
         String result = "";
         String inputString = this.base_encode.getText();
         switch (base_ComboBox.getSelectedIndex()) {
@@ -69,7 +69,8 @@ public class BaseUI {
         this.base_decode.setLineWrap(true);
         this.base_decode.setWrapStyleWord(true);
     }
-    private void decode_Button(){
+
+    private void decode_Button() {
         String result = "";
         byte[] decodedBytes = null;
         String inputString = this.base_encode.getText();
@@ -200,4 +201,5 @@ public class BaseUI {
     public JComponent $$$getRootComponent$$$() {
         return Base;
     }
+
 }

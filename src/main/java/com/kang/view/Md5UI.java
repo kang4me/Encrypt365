@@ -12,6 +12,7 @@ package com.kang.view;
 
 
 import burp.api.montoya.MontoyaApi;
+import com.kang.config.ConfigFile;
 import com.kang.entity.Md5Entity;
 import com.kang.service.Impl.Md5_Encrypt_Impl;
 import com.kang.service.Impl.Md5EncryptApiImpl;
@@ -45,22 +46,34 @@ public class Md5UI {
     private String[] link = {"CMD5", "MD5免费在线"};
     private String[] url = {"https://www.cmd5.com/", "https://www.somd5.com/"};
     private Md5Entity md5_entity = new Md5Entity();
+    private ConfigFile configFile;
 
     public Md5UI(MontoyaApi api) {
         this.api = api;
         init();
 
+        iniFile();
+
         this.Encode_butten.addActionListener((e) -> {
             setMd5_entity();
-            Encode_butten();
+            encodeButton();
         });
         this.Decode_butten.addActionListener((e) -> {
             setMd5_entity();
-            Decode_butten();
+            decodeButton();
+        });
+        this.Save_Button.addActionListener((e) -> {
+            configFile = new ConfigFile();
+            setMd5_entity();
+            md5_entity.setLog_Text(configFile.save(md5_entity));
+
+            this.Log_Text.setText(md5_entity.getLog_Text());
+            this.Log_Text.setLineWrap(true);
+            this.Log_Text.setWrapStyleWord(true);
         });
     }
 
-    private void Encode_butten(){
+    private void encodeButton() {
         Md5Encrypt md5_encrypt = new Md5_Encrypt_Impl();
         switch (md5_entity.getHash_ComboBox()) {
             case 0:
@@ -90,14 +103,16 @@ public class Md5UI {
         this.outputString_Text.setLineWrap(true);
         this.outputString_Text.setWrapStyleWord(true);
     }
-    private void Decode_butten(){
+
+    private void decodeButton() {
         Md5EncryptApi md5_encrypt_api = new Md5EncryptApiImpl();
+
         switch (Link_URL.getSelectedIndex()) {
             case 0:
                 if (this.No_vip.isSelected()) {
                     md5_entity = md5_encrypt_api.CMD5_url(md5_entity);
                 } else if (this.Yes_vip.isSelected()) {
-                    md5_entity= md5_encrypt_api.CMD5_url_api(md5_entity);
+                    md5_entity = md5_encrypt_api.CMD5_url_api(md5_entity);
                 }
                 break;
             case 1:
@@ -114,20 +129,25 @@ public class Md5UI {
         this.outputString_Text.setWrapStyleWord(true);
     }
 
-    private void setMd5_entity(){
+    public void iniFile() {
+        configFile = new ConfigFile();
+        md5_entity = configFile.getConfig(md5_entity);
+        this.Email_text.setText(md5_entity.getEmail_text());
+        this.Key_text.setText(md5_entity.getKey_text());
+    }
+
+    private void setMd5_entity() {
         md5_entity.setInputString(this.inputString_Text.getText());
+
         md5_entity.setHash_ComboBox(Hash_ComboBox.getSelectedIndex());
         md5_entity.setUrl_api(url[this.Link_URL.getSelectedIndex()]);
 
-        if(this.Email_text.getText() != null || !this.Email_text.getText().equals("")){
-            md5_entity.setEmail_text(this.Email_text.getText());
-        }
-        if(this.Key_text.getText() != null || !this.Key_text.getText().equals("")){
-            md5_entity.setKey_text((this.Key_text.getText()));
-        }
+        md5_entity.setEmail_text(this.Email_text.getText());
+        md5_entity.setKey_text((this.Key_text.getText()));
+
     }
 
-    private void init(){
+    private void init() {
         ButtonGroup bg = new ButtonGroup();
         bg.add(No_vip);
         bg.add(Yes_vip);

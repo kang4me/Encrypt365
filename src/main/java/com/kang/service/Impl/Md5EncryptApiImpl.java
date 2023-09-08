@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class Md5EncryptApiImpl implements Md5EncryptApi {
     public Md5Entity CMD5_url_api(Md5Entity md5_entity) {
         md5_entity.setUrl_api(md5_entity.getUrl_api() + "api.ashx?email=" + md5_entity.getEmail_text() + "&key=" + md5_entity.getKey_text() + "&hash=" + md5_entity.getInputString());
-        md5_entity.setOutputString("查询失败，查看日志\n\r");
+        md5_entity.setOutputString("查询失败，查看日志");
         String log = "";
         try {
             URL url = new URL(md5_entity.getUrl_api());

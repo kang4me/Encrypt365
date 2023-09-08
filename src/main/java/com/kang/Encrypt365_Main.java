@@ -12,14 +12,21 @@ package com.kang;
 
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
+import com.kang.config.ConfigFile;
 import com.kang.view.MainUI;
 
 public class Encrypt365_Main implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api)
     {
+        ConfigFile configFile = new ConfigFile();
+        configFile.iniFile();
+
         api.extension().setName("Encrypt365");
-        api.logging().logToOutput("Author: Kang");
+        api.logging().logToOutput("===========================");
+        api.logging().logToOutput("[+]  load successful!      ");
+        api.logging().logToOutput("[+]  code by Kang          ");
+        api.logging().logToOutput("===========================");
         api.userInterface().registerSuiteTab("Encrypt365", new MainUI(api).root);
     }
 

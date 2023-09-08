@@ -74,4 +74,5 @@ public class Md5Entity {
     public void setHash_ComboBox(int hash_ComboBox) {
         Hash_ComboBox = hash_ComboBox;
     }
+
 }
