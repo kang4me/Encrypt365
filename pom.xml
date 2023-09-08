@@ -21,7 +21,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cn.com.aiooo.Encrypt365_Main</mainClass>
+                            <mainClass>com.kang.Encrypt365_Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
