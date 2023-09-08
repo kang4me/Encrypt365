@@ -12,16 +12,15 @@ package cn.com.aiooo;
 
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
-import burp.api.montoya.logging.Logging;
+import cn.com.aiooo.view.MainUI;
 
 public class Encrypt365_Main implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api)
     {
-        Logging logging = api.logging();
         api.extension().setName("Encrypt365");
-        logging.logToOutput("Author: Kang");
-        api.userInterface().registerSuiteTab("Encrypt365", new Main_UI(api).root);
+        api.logging().logToOutput("Author: Kang");
+        api.userInterface().registerSuiteTab("Encrypt365", new MainUI(api).root);
     }
 
 }
