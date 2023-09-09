@@ -19,9 +19,6 @@ public class Encrypt365_Main implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api)
     {
-        ConfigFile configFile = new ConfigFile();
-        configFile.iniFile();
-
         api.extension().setName("Encrypt365");
         api.logging().logToOutput("===========================");
         api.logging().logToOutput("[+]  load successful!      ");

@@ -12,6 +12,7 @@ package com.kang.view;
 
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.logging.Logging;
 import com.kang.config.ConfigFile;
 import com.kang.entity.Md5Entity;
 import com.kang.service.Impl.Md5_Encrypt_Impl;
@@ -41,15 +42,15 @@ public class Md5UI {
     private JScrollPane JS2;
     private JRadioButton No_vip;
     private JRadioButton Yes_vip;
-    private final MontoyaApi api;
-    private String[] str = {"MD5", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-1024"};
-    private String[] link = {"CMD5", "MD5免费在线"};
-    private String[] url = {"https://www.cmd5.com/", "https://www.somd5.com/"};
+    private final String[] str = {"MD5", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-1024"};
+    private final String[] link = {"CMD5", "MD5免费在线"};
+    private final String[] url = {"https://www.cmd5.com/", "https://www.somd5.com/"};
     private Md5Entity md5_entity = new Md5Entity();
     private ConfigFile configFile;
+    private final Logging log;
 
     public Md5UI(MontoyaApi api) {
-        this.api = api;
+        log = api.logging();
         init();
 
         iniFile();
@@ -76,28 +77,27 @@ public class Md5UI {
     private void encodeButton() {
         Md5Encrypt md5_encrypt = new Md5_Encrypt_Impl();
         switch (md5_entity.getHash_ComboBox()) {
-            case 0:
+            case 0 ->
                 //MD5
-                md5_entity.setOutputString(md5_encrypt.MD5_Encode(md5_entity.getInputString()));
-                break;
-            case 1:
-                //SHA-1
-                break;
-            case 2:
-                //SHA-224
-                break;
-            case 3:
-                //SHA-256
-                break;
-            case 4:
-                //SHA-384
-                break;
-            case 5:
-                //SHA-512
-                break;
-            case 6:
-                //SHA-1024
-                break;
+                    md5_entity.setOutputString(md5_encrypt.MD5_Encode(md5_entity.getInputString()));
+            case 1 -> {
+            }
+            //SHA-1
+            case 2 -> {
+            }
+            //SHA-224
+            case 3 -> {
+            }
+            //SHA-256
+            case 4 -> {
+            }
+            //SHA-384
+            case 5 -> {
+            }
+            //SHA-512
+            case 6 -> {
+            }
+            //SHA-1024
         }
         this.outputString_Text.setText(md5_entity.getOutputString());
         this.outputString_Text.setLineWrap(true);
@@ -108,17 +108,15 @@ public class Md5UI {
         Md5EncryptApi md5_encrypt_api = new Md5EncryptApiImpl();
 
         switch (Link_URL.getSelectedIndex()) {
-            case 0:
+            case 0 -> {
                 if (this.No_vip.isSelected()) {
                     md5_entity = md5_encrypt_api.CMD5_url(md5_entity);
                 } else if (this.Yes_vip.isSelected()) {
                     md5_entity = md5_encrypt_api.CMD5_url_api(md5_entity);
                 }
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
+            }
+            case 1 -> {
+            }
         }
         this.Log_Text.setText(md5_entity.getLog_Text());
         this.Log_Text.setLineWrap(true);

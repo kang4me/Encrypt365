@@ -17,6 +17,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.logging.Logging;
 import com.kang.entity.AesEntity;
 import com.kang.service.AesEncrypt;
 import com.kang.service.Impl.AesEncryptImpl;
@@ -46,12 +47,12 @@ public class AesUI {
     private JPanel JPanel2;
     private JPanel JPanel3;
     private JPanel JPanel4;
-    private MontoyaApi api;
     private AesEncrypt aes_encrypt;
-    private AesEntity aes_entity = new AesEntity();
+    private final AesEntity aes_entity = new AesEntity();
+    private final Logging log;
 
     public AesUI(MontoyaApi api) {
-        this.api = api;
+        log = api.logging();
 
         init();//初始化数据
 
@@ -112,12 +113,12 @@ public class AesUI {
                 aes_entity.setEncryptedBytes(Hex.decodeHex(aes_entity.getPlainText()));
             }
         } catch (DecoderException e) {
-            throw new RuntimeException(e);
+            log.logToError(e);
         }
 
         bt = aes_encrypt.AES_Decrypt_all();
 
-        if (bt == null || bt.equals("")) {
+        if (bt == null || bt.isEmpty()) {
             bt = "参数异常，请检查参数";
         }
 
@@ -221,7 +222,7 @@ public class AesUI {
             @Override
             public void focusLost(FocusEvent e) {
                 //失去焦点时，用户尚未在文本框内输入任何内容，所以依旧显示提示文字
-                if (Password.getText().equals("")) {
+                if (Password.getText().isEmpty()) {
                     Password.setForeground(Color.gray); //将提示文字设置为灰色
                     Password.setText("请输入密码");     //显示提示文字
                 }
@@ -241,7 +242,7 @@ public class AesUI {
             @Override
             public void focusLost(FocusEvent e) {
                 //失去焦点时，用户尚未在文本框内输入任何内容，所以依旧显示提示文字
-                if (iv.getText().equals("")) {
+                if (iv.getText().isEmpty()) {
                     iv.setForeground(Color.gray); //将提示文字设置为灰色
                     iv.setText("ECB模式无需填写!");     //显示提示文字
                 }
