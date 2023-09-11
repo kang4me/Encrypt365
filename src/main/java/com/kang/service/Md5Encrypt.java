@@ -11,6 +11,12 @@
 package com.kang.service;
 
 public interface Md5Encrypt {
-    public String MD5_Encode(String inputString);
+    public String md5Encode32(String inputString);
+    public String md5Encode16(String inputString);
+    public String sha1Encode(String inputString);
+    public String sha224Encode(String inputString);
+    public String sha256Encode(String inputString);
+    public String sha384Encode(String inputString);
+    public String sha512Encode(String inputString);
 
 }
