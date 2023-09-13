@@ -11,47 +11,68 @@
 package com.kang.test;
 
 
-import java.io.StringReader;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Security;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
-import com.kang.entity.RsaEntity;
-import com.kang.service.Impl.RsaPrivateKeyEncryptImpl;
-import com.kang.service.RsaPrivateKeyEncrypt;
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
+import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
+import org.bouncycastle.asn1.pkcs.RSAPublicKey;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMDecryptorProvider;
-import org.bouncycastle.openssl.PEMEncryptedKeyPair;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
+import org.bouncycastle.openssl.*;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
 public class Test {
-    public static void main(String[] args) throws Exception {
-        RsaPrivateKeyEncrypt rsaPrivateKeyEncrypt = new RsaPrivateKeyEncryptImpl();
-        RsaEntity rsaEntity = new RsaEntity();
-        // 加载私钥（PEM格式或DER格式），并将其转换为PrivateKey对象
-        String privateKeyPEM = "-----BEGIN PRIVATE KEY-----\n" +
-                "MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAzAqYDCuGLcNNf2c+\n" +
-                "JpTInkoPwReSGdMAUab4Ii/s8NzYvV1BA57rNV8xukYVPDHo01co/SvrdFJY6l6J\n" +
-                "2QTIiwIDAQABAkBRYwRlDlNWG6nk4KyUvRIMuWPxVFKNhHGDIEOnd1BefjIRf4zm\n" +
-                "0NQyalIPMRKZUT3ic63Gr/GSOCu1qsx4jY4BAiEA9d3VkpGLuetLwpG9+86bKoy6\n" +
-                "t1r7oCA50KNVip99FwECIQDUc3UrLRDmnXBlGwuaNm0Z7BGikNkQqCHqLh3dVlxL\n" +
-                "iwIgSk22Y8s0rQVdKfodrmHsJtnM++i1LtlOX61dBr3YcgECIB+r3qnDHCPlEJ5h\n" +
-                "+8bPmlAk+zQK9/Edv4CTw2v9teClAiEA05fLm3XMfIGqXBHdK7SF7T/Ln9bJrna4\n" +
-                "qMe2lX4pII4=\n" +
-                "-----END PRIVATE KEY-----";
-        rsaEntity.setPrivateKey(privateKeyPEM);
-        rsaEntity.setCharset("utf-8");
-        rsaEntity.setText("SqU01PZaypvWMsCce8Tb58OFrd0115Q1nXRemVpD+lLP8V5usgcy2YmI1yV7F8Q0Sf5946rQPbeAHlf/2WVFpw==");
+    public static void main(String[] args) {
+        try {
+            int keySize = 1024; // 设置密钥位数
+            KeyPair keyPair = generateRSAKeyPair(keySize);
 
+            // 输出公钥和私钥
+            String publicKeyPEM = publicKeyToPEM(keyPair.getPublic());
+            String privateKeyPEM = privateKeyToPEM(keyPair.getPrivate());
 
-        System.out.println("解密后的文本: " + rsaPrivateKeyEncrypt.decodeWithPrivateKey(rsaPrivateKeyEncrypt.getPrivateKeyFromPEM(rsaEntity.getPrivateKey()),rsaEntity));
+            System.out.println("公钥:");
+            System.out.println(publicKeyPEM);
+            System.out.println("\n私钥:");
+            System.out.println(privateKeyPEM);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static KeyPair generateRSAKeyPair(int keySize) throws NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(keySize);
+        return keyPairGenerator.generateKeyPair();
+    }
+
+    public static String publicKeyToPEM(PublicKey publicKey) throws Exception {
+        SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfo.getInstance(publicKey.getEncoded());
+        return convertToPEM(publicKeyInfo);
+    }
+
+    public static String privateKeyToPEM(PrivateKey privateKey) throws Exception {
+        PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKey.getEncoded());
+        return convertToPEM(privateKeyInfo);
+    }
+
+    private static String convertToPEM(Object obj) throws Exception {
+        StringWriter sw = new StringWriter();
+        try (JcaPEMWriter pemWriter = new JcaPEMWriter(sw)) {
+            pemWriter.writeObject(obj);
+        }
+        return sw.toString();
     }
 }

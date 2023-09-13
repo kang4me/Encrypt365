@@ -10,15 +10,21 @@
 
 package com.kang.entity;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 public class RsaEntity {
     private String publicKey;
     private String privateKey;
+    private PublicKey publicKeyApi;
+    private PrivateKey privateKeyApi;
     private int Bit;
     private String outPut;
     private String key;
     private String padding;
     private String charset;
     private String Text;
+    private String keyFormat;
 
     public String getPublicKey() {
         return publicKey;
@@ -34,6 +40,22 @@ public class RsaEntity {
 
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public PublicKey getPublicKeyApi() {
+        return publicKeyApi;
+    }
+
+    public void setPublicKeyApi(PublicKey publicKeyApi) {
+        this.publicKeyApi = publicKeyApi;
+    }
+
+    public PrivateKey getPrivateKeyApi() {
+        return privateKeyApi;
+    }
+
+    public void setPrivateKeyApi(PrivateKey privateKeyApi) {
+        this.privateKeyApi = privateKeyApi;
     }
 
     public int getBit() {
@@ -82,5 +104,13 @@ public class RsaEntity {
 
     public void setText(String text) {
         Text = text;
+    }
+
+    public String getKeyFormat() {
+        return keyFormat;
+    }
+
+    public void setKeyFormat(String keyFormat) {
+        this.keyFormat = keyFormat;
     }
 }

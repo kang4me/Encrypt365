@@ -14,8 +14,7 @@ import burp.api.montoya.MontoyaApi;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.kang.view.AsymmetricCryptography.RsaCreate.RsaCreateUi;
-import com.kang.view.AsymmetricCryptography.RsaPrivateKeyEncrypt.RsaPrivateKeyEncryptUI;
-import com.kang.view.AsymmetricCryptography.RsaPublicKeyEncrypt.RsaPublicKeyEncryptUI;
+import com.kang.view.AsymmetricCryptography.RsaEncrypt.RsaEncryptUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +24,8 @@ public class RsaUI {
     private JTabbedPane RsaUi;
 
     public RsaUI(MontoyaApi api) {
-        RsaUi.addTab("RSA密钥加解密", new RsaPrivateKeyEncryptUI(api).UI);
-        RsaUi.addTab("RSA公钥加解密", new RsaPublicKeyEncryptUI(api).UI);
-        //RsaUi.addTab("RSA公私钥生成", new RsaCreateUi().UI);
+        RsaUi.addTab("RSA加解密", new RsaEncryptUI(api).UI);
+        RsaUi.addTab("RSA公私钥生成", new RsaCreateUi(api).UI);
     }
 
     {

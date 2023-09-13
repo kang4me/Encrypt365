@@ -10,54 +10,93 @@
 
 package com.kang.view.AsymmetricCryptography.RsaCreate;
 
+import burp.api.montoya.MontoyaApi;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.kang.entity.RsaEntity;
+import com.kang.service.Impl.RsaCreateImpl;
+import com.kang.service.RsaCreate;
+import org.apache.commons.codec.binary.Hex;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.nio.ByteBuffer;
+import java.security.NoSuchAlgorithmException;
 
 public class RsaCreateUi {
     public JPanel UI;
     private JComboBox<String> createBit;
     private JComboBox<String> keyFormat;
     private JComboBox<String> outPut;
-    private JTextField key;
     private JButton encodeButton;
     private JTextArea publicKey;
     private JTextArea privateKey;
+    private RsaEntity rsaEntity;
+    private final RsaCreate rsaCreate = new RsaCreateImpl();
+    private final MontoyaApi api;
 
-    public RsaCreateUi() {
+    public RsaCreateUi(MontoyaApi api) {
+        this.api = api;
         ini();
 
         this.encodeButton.addActionListener(e -> {
+            setEntity();
             create();
         });
 
     }
 
     public void create() {
-
-        if (createBit.getSelectedIndex() == 0) {//512
-        } else if (createBit.getSelectedIndex() == 1) {//1024
-        } else if (createBit.getSelectedIndex() == 2) {//2048
-        } else if (createBit.getSelectedIndex() == 3) {//3072
-        } else if (createBit.getSelectedIndex() == 4) {//4096
+        try {
+            rsaEntity = rsaCreate.Create(rsaEntity);
+            if (outPut.getSelectedIndex() == 0) {
+                this.publicKey.setText(rsaCreate.publicKeyToPEM(rsaEntity.getPublicKeyApi()));
+                this.privateKey.setText(rsaCreate.privateKeyToPEM(rsaEntity.getPrivateKeyApi()));
+            } else if (outPut.getSelectedIndex() == 1) {
+                this.publicKey.setText(new String(Hex.encodeHex(rsaEntity.getPublicKeyApi().getEncoded())));
+                this.privateKey.setText(new String(Hex.encodeHex(rsaEntity.getPrivateKeyApi().getEncoded())));
+            } else if (outPut.getSelectedIndex() == 2) {
+                this.publicKey.setText(new String(Hex.encodeHex(rsaEntity.getPublicKeyApi().getEncoded())));
+                this.privateKey.setText(rsaCreate.privateKeyToPEM(rsaEntity.getPrivateKeyApi()));
+            } else if (outPut.getSelectedIndex() == 3) {
+                this.publicKey.setText(rsaCreate.publicKeyToPEM(rsaEntity.getPublicKeyApi()));
+                this.privateKey.setText(new String(Hex.encodeHex(rsaEntity.getPrivateKeyApi().getEncoded())));
+            }
+        } catch (Exception e) {
+            api.logging().logToError(e);
+            throw new RuntimeException(e);
         }
-        boolean flag = keyFormat.getSelectedIndex() != 1;
-
-
     }
 
     public void setEntity() {
+        rsaEntity = new RsaEntity();
+        if (createBit.getSelectedIndex() == 0) {//512
+            rsaEntity.setBit(512);
+        } else if (createBit.getSelectedIndex() == 1) {//1024
+            rsaEntity.setBit(1024);
+        } else if (createBit.getSelectedIndex() == 2) {//2048
+            rsaEntity.setBit(2048);
+        } else if (createBit.getSelectedIndex() == 3) {//3072
+            rsaEntity.setBit(3072);
+        } else if (createBit.getSelectedIndex() == 4) {//4096
+            rsaEntity.setBit(4096);
+        }
+
+        if (keyFormat.getSelectedIndex() == 0) {
+
+        } else if (keyFormat.getSelectedIndex() == 1) {
+
+        }
+
 
     }
 
     private void ini() {
         String[] createBitStr = new String[]{"512位(bit)", "1024位(bit)", "2048位(bit)", "3072位(bit)", "4096位(bit)"};
-        String[] keyFormatStr = new String[]{"PKCS#8", "PKCS#1"};
-        String[] outPutStr = new String[]{"PEM/Base64", "Hex", "Hex公钥", "Hex私钥"};
+        String[] keyFormatStr = new String[]{"PKCS#1"};
+        String[] outPutStr = new String[]{"PEM", "Hex", "Hex公钥", "Hex私钥"};
 
         for (String value : createBitStr) {
             createBit.addItem(value);
@@ -68,27 +107,6 @@ public class RsaCreateUi {
         for (String value : outPutStr) {
             outPut.addItem(value);
         }
-
-        key.setForeground(Color.gray); //将提示文字设置为灰色
-        key.setText("私钥密码，可以不填写");     //显示提示文字
-        key.addFocusListener(new FocusListener() {
-            public void focusGained(FocusEvent e) {
-                //得到焦点时，当前文本框的提示文字和创建该对象时的提示文字一样，说明用户正要键入内容
-                if (key.getText().equals("私钥密码，可以不填写")) {
-                    key.setText("");     //将提示文字清空
-                    key.setForeground(Color.black);  //设置用户输入的字体颜色为黑色
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                //失去焦点时，用户尚未在文本框内输入任何内容，所以依旧显示提示文字
-                if (key.getText().isEmpty()) {
-                    key.setForeground(Color.gray); //将提示文字设置为灰色
-                    key.setText("私钥密码，可以不填写");     //显示提示文字
-                }
-            }
-        });
 
     }
 
@@ -110,7 +128,7 @@ public class RsaCreateUi {
         UI = new JPanel();
         UI.setLayout(new GridBagLayout());
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 9, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 7, new Insets(0, 0, 0, 0), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -123,7 +141,7 @@ public class RsaCreateUi {
         label1.setText("生成密钥位数：");
         panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         createBit = new JComboBox();
-        panel1.add(createBit, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(100, -1), null, 0, false));
+        panel1.add(createBit, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(100, -1), null, 1, false));
         final JLabel label2 = new JLabel();
         label2.setText("密钥格式：");
         panel1.add(label2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -134,32 +152,27 @@ public class RsaCreateUi {
         panel1.add(label3, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         outPut = new JComboBox();
         panel1.add(outPut, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(100, -1), null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setText("证书密码:");
-        panel1.add(label4, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        key = new JTextField();
-        key.setToolTipText("私钥密码，可以不填写");
-        panel1.add(key, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         encodeButton = new JButton();
         encodeButton.setText("生成");
-        panel1.add(encodeButton, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 35), null, null, 0, false));
+        panel1.add(encodeButton, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 35), null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        gbc.weighty = 0.7;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel2, gbc);
-        final JLabel label5 = new JLabel();
-        label5.setForeground(new Color(-15932142));
-        label5.setText("非对称加密公钥：");
-        panel2.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        label4.setForeground(new Color(-15932142));
+        label4.setText("非对称加密公钥：");
+        panel2.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel2.add(scrollPane1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel2.add(scrollPane1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 150), null, 0, false));
         publicKey = new JTextArea();
+        publicKey.setLineWrap(true);
         scrollPane1.setViewportView(publicKey);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -171,13 +184,14 @@ public class RsaCreateUi {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel3, gbc);
-        final JLabel label6 = new JLabel();
-        label6.setForeground(new Color(-1763052));
-        label6.setText("非对称加密私钥：");
-        panel3.add(label6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        label5.setForeground(new Color(-1763052));
+        label5.setText("非对称加密私钥：");
+        panel3.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
-        panel3.add(scrollPane2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(scrollPane2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 200), null, 0, false));
         privateKey = new JTextArea();
+        privateKey.setLineWrap(true);
         scrollPane2.setViewportView(privateKey);
     }
 
