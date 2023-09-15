@@ -3,8 +3,8 @@
 ### 贡献者
 <hr>
 
-<!-- readme: contributors -start -->
-<!-- readme: contributors -end -->
+<!-- readme: Contributes -start -->
+<!-- readme: Contributes -end -->
 
 ### 使用环境
 <hr>
