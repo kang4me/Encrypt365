@@ -10,7 +10,7 @@
         <a href="https://github.com/contributes">
             <img src="https://avatars.githubusercontent.com/u/17954196?v=4" width="100;" alt="contributes"/>
             <br />
-            <sub><b>contributes</b></sub>
+            <sub><b>Contributes</b></sub>
         </a>
     </td></tr>
 </table>
