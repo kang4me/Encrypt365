@@ -21,8 +21,8 @@ public class AesEntity {
     private String iv;
     private String Output;
     private String charset;
-    private String plainText;
-    private byte[] encryptedBytes;
+    private String inputValue;
+    private String outputValue;
 
     public Mode getMode() {
         return mode;
@@ -80,20 +80,19 @@ public class AesEntity {
         this.charset = charset;
     }
 
-    public String getPlainText() {
-        return plainText;
+    public String getInputValue() {
+        return inputValue;
     }
 
-    public void setPlainText(String plainText) {
-        this.plainText = plainText;
+    public void setInputValue(String inputValue) {
+        this.inputValue = inputValue;
     }
 
-    public byte[] getEncryptedBytes() {
-        return encryptedBytes;
+    public String getOutputValue() {
+        return outputValue;
     }
 
-    public void setEncryptedBytes(byte[] encryptedBytes) {
-        this.encryptedBytes = encryptedBytes;
+    public void setOutputValue(String outputValue) {
+        this.outputValue = outputValue;
     }
-
 }

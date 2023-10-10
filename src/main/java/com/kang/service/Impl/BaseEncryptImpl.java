@@ -10,6 +10,7 @@
 
 package com.kang.service.Impl;
 
+import cn.hutool.core.codec.Base32;
 import com.kang.service.BaseEncrypt;
 
 import java.math.BigInteger;
@@ -18,6 +19,13 @@ import java.util.*;
 
 public class BaseEncryptImpl implements BaseEncrypt {
 
+    /**
+     * base64_Encode
+     * @param inputString
+     * @return java.lang.String
+     * @Author: Kang on 2023/10/10 14:17
+     * Base64 加密
+     */
     public String base64_Encode(String inputString) {
         byte[] inputBytes = inputString.getBytes(StandardCharsets.UTF_8);
 
@@ -30,7 +38,13 @@ public class BaseEncryptImpl implements BaseEncrypt {
         }
         return encodedString;
     }
-
+    /**
+     * base64_Decode
+     * @param encodedString
+     * @return java.lang.String
+     * @Author: Kang on 2023/10/10 14:17
+     * base64解密
+     */
     public String base64_Decode(String encodedString) {
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString.getBytes(StandardCharsets.UTF_8));
         return new String(decodedBytes, StandardCharsets.UTF_8);

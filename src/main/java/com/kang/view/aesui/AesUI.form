@@ -143,7 +143,9 @@
             <children>
               <component id="994ae" class="javax.swing.JTextArea" binding="Aes_encode">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <lineWrap value="true"/>
+                </properties>
               </component>
             </children>
           </scrollpane>
@@ -198,7 +200,10 @@
             <children>
               <component id="fad40" class="javax.swing.JTextArea" binding="Aes_decode">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <lineWrap value="true"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
               </component>
             </children>
           </scrollpane>

@@ -45,7 +45,7 @@
           <html.disable class="java.lang.Boolean" value="false"/>
         </clientProperties>
       </component>
-      <scrollpane id="1b42b" binding="JS">
+      <scrollpane id="1b42b" binding="JSencode">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="1.0"/>
@@ -58,14 +58,15 @@
             <properties>
               <columns value="0"/>
               <editable value="true"/>
-              <lineWrap value="false"/>
+              <lineWrap value="true"/>
               <margin top="5" left="5" bottom="5" right="5"/>
               <text value=""/>
+              <wrapStyleWord value="true"/>
             </properties>
           </component>
         </children>
       </scrollpane>
-      <scrollpane id="61737">
+      <scrollpane id="61737" binding="JSdecode">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="1.0"/>
@@ -76,7 +77,9 @@
           <component id="d2d64" class="javax.swing.JTextArea" binding="base_decode">
             <constraints/>
             <properties>
+              <lineWrap value="true"/>
               <text value=""/>
+              <wrapStyleWord value="true"/>
             </properties>
           </component>
         </children>

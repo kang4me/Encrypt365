@@ -19,7 +19,13 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ConfigFile {
-
+    /**
+     * getConfig
+     * @param md5Entity
+     * @return com.kang.entity.Md5Entity
+     * @Author: Kang on 2023/10/10 14:05
+     * 创建文件
+     */
     public Md5Entity getConfig(Md5Entity md5Entity){
         String log = null;
         Properties prop = new Properties();
@@ -48,6 +54,13 @@ public class ConfigFile {
         md5Entity.setLog_Text(log);
         return md5Entity;
     }
+    /**
+     * save
+     * @param md5Entity
+     * @return java.lang.String
+     * @Author: Kang on 2023/10/10 14:14
+     * 保存文件
+     */
     public String save(Md5Entity md5Entity){
         Properties prop = new Properties();
         ///保存属性到b.properties文件
@@ -65,6 +78,13 @@ public class ConfigFile {
         }
         return log;
     }
+    /**
+     * iniFile
+     * @param
+     * @return void
+     * @Author: Kang on 2023/10/10 14:15
+     * 初始化文件
+     */
     public void iniFile(){
         Properties prop = new Properties();
         File file = new File("");

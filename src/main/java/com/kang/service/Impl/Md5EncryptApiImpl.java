@@ -25,6 +25,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Md5EncryptApiImpl implements Md5EncryptApi {
+
+    /**
+     * CMD5_url_api
+     * @param md5_entity
+     * @return com.kang.entity.Md5Entity
+     * @Author: Kang on 2023/10/10 14:22
+     * cmd5 网页API接口对接
+     */
     public Md5Entity CMD5_url_api(Md5Entity md5_entity) {
         md5_entity.setUrl_api(md5_entity.getUrl_api() + "api.ashx?email=" + md5_entity.getEmail_text() + "&key=" + md5_entity.getKey_text() + "&hash=" + md5_entity.getInputString());
         md5_entity.setOutputString("查询失败，查看日志");
@@ -97,6 +105,13 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
         return md5_entity;
     }
 
+    /**
+     * CMD5_url
+     * @param md5_entity
+     * @return com.kang.entity.Md5Entity
+     * @Author: Kang on 2023/10/10 14:23
+     * 网页请求方式获取解密结果，频率过高会出现验证码验证，未设置验证码识别
+     */
     public Md5Entity CMD5_url(Md5Entity md5_entity) {
         String log = "";
         md5_entity.setOutputString("查询失败，查看日志");
@@ -150,6 +165,14 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
         return md5_entity;
     }
 
+    /**
+     * requestGet
+     * @param inputString
+     * @param link_url
+     * @return java.lang.String
+     * @Author: Kang on 2023/10/10 14:24
+     * cmd5网页请求模拟真实用户数据包
+     */
     public String requestGet(String inputString, String link_url) throws IOException {
         URL url = new URL(link_url);
         // 创建连接并设置请求属性
@@ -181,6 +204,13 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
         return "__EVENTTARGET=" + __EVENTTARGET + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE=" + __VIEWSTATE + "&__VIEWSTATEGENERATOR=" + __VIEWSTATEGENERATOR + "&ctl00%24ContentPlaceHolder1%24TextBoxInput=" + inputString + "&ctl00%24ContentPlaceHolder1%24InputHashType=md5&ctl00%24ContentPlaceHolder1%24Button1=%E6%9F%A5%E8%AF%A2&ctl00%24ContentPlaceHolder1%24HiddenField1=" + $HiddenField1 + "&ctl00%24ContentPlaceHolder1%24HiddenField2=" + $HiddenField2;
     }
 
+    /**
+     * HttpConnection
+     * @param connection
+     * @return void
+     * @Author: Kang on 2023/10/10 14:25
+     * cmd5 设置数据包
+     */
     public void HttpConnection(HttpURLConnection connection) {
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.setRequestProperty("Referer", "https://www.cmd5.com/");
@@ -192,6 +222,14 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
         connection.setRequestProperty("Sec-Fetch-User", "?1");
     }
 
+    /**
+     * extractValue
+     * @param html
+     * @param name
+     * @return java.lang.String
+     * @Author: Kang on 2023/10/10 14:25
+     * cmd5 过滤返回数据包
+     */
     public String extractValue(String html, String name) {
         String regex = "<input type=\"hidden\" name=\"" + name + "\" id=\"[^\"]*\" value=\"([^\"]*)\"\\s*/?>";
         Pattern pattern = Pattern.compile(regex);

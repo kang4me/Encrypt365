@@ -37,7 +37,7 @@ public class AesEncryptImpl implements AesEncrypt {
      * @return
      */
     public byte[] AES_Encrypt_all(){
-        return aes.encrypt(aes_entity.getPlainText().getBytes(Charset.forName(aes_entity.getCharset())));
+        return aes.encrypt(aes_entity.getInputValue().getBytes(Charset.forName(aes_entity.getCharset())));
     }
 
     /**
@@ -45,7 +45,7 @@ public class AesEncryptImpl implements AesEncrypt {
      * @return
      */
     public String AES_Decrypt_all(){
-        return new String(aes.decrypt(aes_entity.getEncryptedBytes()), Charset.forName(aes_entity.getCharset()));
+        return new String(aes.decrypt(aes_entity.getInputValue()), Charset.forName(aes_entity.getCharset()));
     }
 
     /**
@@ -83,12 +83,14 @@ public class AesEncryptImpl implements AesEncrypt {
      * 封印；
      */
 
+
     /**
-     * 自写填充方法
-     * 不满足秘钥长度规则时采用0x00填补
+     * padKeyTo128_192_256Bits
      * @param originalKey
      * @param size
-     * @return
+     * @return byte[]
+     * @Author: Kang on 2023/10/10 14:16
+     * 数据位数选择
      */
     public byte[] padKeyTo128_192_256Bits(String originalKey, int size) {
         byte[] keyBytes = originalKey.getBytes(Charset.forName(aes_entity.getCharset()));

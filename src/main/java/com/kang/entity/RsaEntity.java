@@ -23,8 +23,9 @@ public class RsaEntity {
     private String key;
     private String padding;
     private String charset;
-    private String Text;
+    private String textValue;
     private String keyFormat;
+    private String outputValue;
 
     public String getPublicKey() {
         return publicKey;
@@ -98,12 +99,12 @@ public class RsaEntity {
         this.charset = charset;
     }
 
-    public String getText() {
-        return Text;
+    public String getTextValue() {
+        return textValue;
     }
 
-    public void setText(String text) {
-        Text = text;
+    public void setTextValue(String textValue) {
+        this.textValue = textValue;
     }
 
     public String getKeyFormat() {
@@ -112,5 +113,13 @@ public class RsaEntity {
 
     public void setKeyFormat(String keyFormat) {
         this.keyFormat = keyFormat;
+    }
+
+    public String getOutputValue() {
+        return outputValue;
+    }
+
+    public void setOutputValue(String outputValue) {
+        this.outputValue = outputValue;
     }
 }

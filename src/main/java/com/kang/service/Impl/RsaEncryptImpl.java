@@ -24,7 +24,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class RsaEncryptImpl implements RsaEncrypt {
     /**
-     *
+     * 过滤秘钥头尾部
      * @param pemPrivateKey
      * @return
      * @throws Exception
@@ -44,7 +44,7 @@ public class RsaEncryptImpl implements RsaEncrypt {
     }
 
     /**
-     *
+     * 过滤公钥头尾部
      * @param pemPublicKey
      * @return
      * @throws Exception
@@ -61,7 +61,7 @@ public class RsaEncryptImpl implements RsaEncrypt {
     }
 
     /**
-     *
+     * 公钥加密数据
      * @param publicKey
      * @param rsaEntity
      * @return
@@ -70,11 +70,11 @@ public class RsaEncryptImpl implements RsaEncrypt {
     public byte[] encryptWithPublicKey(PublicKey publicKey,RsaEntity rsaEntity) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        return cipher.doFinal(rsaEntity.getText().getBytes(Charset.forName(rsaEntity.getCharset())));
+        return cipher.doFinal(rsaEntity.getTextValue().getBytes(Charset.forName(rsaEntity.getCharset())));
     }
 
     /**
-     *
+     * 公钥解密数据
      * @param publicKey
      * @param rsaEntity
      * @return
@@ -86,7 +86,7 @@ public class RsaEncryptImpl implements RsaEncrypt {
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
 
         // 要解密的密文（Base64编码）
-        byte[] encryptedTextBytes = Base64.decodeBase64(rsaEntity.getText());
+        byte[] encryptedTextBytes = Base64.decodeBase64(rsaEntity.getTextValue());
 
         // 执行解密操作
         byte[] decryptedBytes = cipher.doFinal(encryptedTextBytes);
@@ -96,7 +96,7 @@ public class RsaEncryptImpl implements RsaEncrypt {
     }
 
     /**
-     *
+     * 私钥加密数据
      * @param privateKey
      * @param rsaEntity
      * @return
@@ -105,11 +105,11 @@ public class RsaEncryptImpl implements RsaEncrypt {
     public byte[] encryptWithPrivateKey(PrivateKey privateKey,RsaEntity rsaEntity) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-        return cipher.doFinal(rsaEntity.getText().getBytes(Charset.forName(rsaEntity.getCharset())));
+        return cipher.doFinal(rsaEntity.getTextValue().getBytes(Charset.forName(rsaEntity.getCharset())));
     }
 
     /**
-     *
+     * 私钥解密数据
      * @param privateKey
      * @param rsaEntity
      * @return
@@ -121,7 +121,7 @@ public class RsaEncryptImpl implements RsaEncrypt {
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
         // 要解密的密文（Base64编码）
-        byte[] encryptedTextBytes = Base64.decodeBase64(rsaEntity.getText());
+        byte[] encryptedTextBytes = Base64.decodeBase64(rsaEntity.getTextValue());
 
         // 执行解密操作
         byte[] decryptedBytes = cipher.doFinal(encryptedTextBytes);

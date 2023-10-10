@@ -18,13 +18,17 @@ import java.awt.event.FocusListener;
 
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.logging.Logging;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.kang.entity.AesEntity;
+import com.kang.entity.HistoryEntity;
 import com.kang.service.AesEncrypt;
-import com.kang.service.Impl.AesEncryptImpl;
+import com.kang.service.History;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.kang.service.Impl.AesEncryptImpl;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
@@ -38,7 +42,7 @@ public class AesUI {
     private JTextField iv;
     private JComboBox<String> Output__Box;
     private JComboBox<String> Charset__Box;
-    private JTextArea Aes_encode;
+    public JTextArea Aes_encode;
     private JTextArea Aes_decode;
     private JButton AES_Encode_Button;
     private JButton AES_Decode_Button;
@@ -50,28 +54,45 @@ public class AesUI {
     private AesEncrypt aes_encrypt;
     private final AesEntity aes_entity = new AesEntity();
     private final Logging log;
+    @Inject
+    private HistoryEntity historyEntity;
+    @Inject
+    private History history;
 
-    public AesUI(MontoyaApi api) {
+    public AesUI(MontoyaApi api, Injector injector) {
         log = api.logging();
+        history = injector.getInstance(History.class);
+        historyEntity = injector.getInstance(HistoryEntity.class);
 
         init();//初始化数据
-
+        
         this.AES_Encode_Button.addActionListener((e) -> {
             aesEntity();//设置输入数据
             aes_encrypt = new AesEncryptImpl(aes_entity);
             Encode_modeSelected();
+            historyEntity.setAesEntity(aes_entity);//设置数据
+            history.aesHistory(injector);//将传递注入
         });
         this.AES_Decode_Button.addActionListener((e) -> {
             aesEntity();//设置输入数据
             aes_encrypt = new AesEncryptImpl(aes_entity);
             Decode_modeSelected();
+            historyEntity.setAesEntity(aes_entity);
+            history.aesHistory(injector);
         });
     }
 
+    /**
+     * Encode_modeSelected
+     * @param 
+     * @return void
+     * @Author: Kang on 2023/10/10 14:37
+     * 加密监听方法体
+     */
     private void Encode_modeSelected() {
 
         if (aes_entity.getPadding() == Padding.NoPadding) {
-            if ((aes_entity.getPlainText().length() % 16) != 0) {
+            if ((aes_entity.getInputValue().length() % 16) != 0) {
                 Aes_decode.setText("加密文本必须为16的倍数");
                 return;
             }
@@ -87,7 +108,7 @@ public class AesUI {
         try {
             bt = aes_encrypt.AES_Encrypt_all();
         } catch (Exception e) {
-            Aes_decode.setText("");
+            Aes_decode.setText("异常信息");
         }
 
         if (bt == null) {
@@ -97,36 +118,50 @@ public class AesUI {
 
         //输出方式
         if (Output__Box.getSelectedIndex() == 0) {
-            Aes_decode.setText(new String(Base64.encodeBase64(bt)));
+            aes_entity.setOutputValue(new String(Base64.encodeBase64(bt)));
+            Aes_decode.setText(aes_entity.getOutputValue());
         } else if (Output__Box.getSelectedIndex() == 1) {
-            Aes_decode.setText(new String(Hex.encodeHex(bt)));
+            aes_entity.setOutputValue(new String(Hex.encodeHex(bt)));
+            Aes_decode.setText(aes_entity.getOutputValue());
         }
     }
 
+    /**
+     * Decode_modeSelected
+     * @param 
+     * @return void
+     * @Author: Kang on 2023/10/10 14:38
+     * 解密监听方法体
+     */
     private void Decode_modeSelected() {
-        String bt;
         //输入方式
         try {
             if (Output__Box.getSelectedIndex() == 0) {
-                aes_entity.setEncryptedBytes(Base64.decodeBase64(aes_entity.getPlainText()));
+                aes_entity.setInputValue(new String(Base64.decodeBase64(aes_entity.getInputValue())));
             } else if (Output__Box.getSelectedIndex() == 1) {
-                aes_entity.setEncryptedBytes(Hex.decodeHex(aes_entity.getPlainText()));
+                aes_entity.setInputValue(new String(Hex.decodeHex(aes_entity.getInputValue())));
             }
         } catch (DecoderException e) {
             log.logToError(e);
         }
 
-        bt = aes_encrypt.AES_Decrypt_all();
+        aes_entity.setOutputValue(aes_encrypt.AES_Decrypt_all());
 
-        if (bt == null || bt.isEmpty()) {
-            bt = "参数异常，请检查参数";
+        if (aes_entity.getOutputValue() == null || aes_entity.getOutputValue().isEmpty()) {
+            Aes_decode.setText("参数异常，请检查参数");
         }
-
-        Aes_decode.setText(bt);
+        Aes_decode.setText(aes_entity.getOutputValue());
     }
 
+    /**
+     * aesEntity
+     * @param
+     * @return void
+     * @Author: Kang on 2023/10/10 14:37
+     * 设置数据信息
+     */
     private void aesEntity() {
-        aes_entity.setPlainText(Aes_encode.getText());
+        aes_entity.setInputValue(Aes_encode.getText());
         aes_entity.setKey(Password.getText());
         aes_entity.setIv(iv.getText());
 
@@ -328,6 +363,7 @@ public class AesUI {
         final JScrollPane scrollPane1 = new JScrollPane();
         JPanel2.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Aes_encode = new JTextArea();
+        Aes_encode.setLineWrap(true);
         scrollPane1.setViewportView(Aes_encode);
         JPanel3 = new JPanel();
         JPanel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
@@ -355,6 +391,8 @@ public class AesUI {
         final JScrollPane scrollPane2 = new JScrollPane();
         JPanel4.add(scrollPane2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Aes_decode = new JTextArea();
+        Aes_decode.setLineWrap(true);
+        Aes_decode.setWrapStyleWord(true);
         scrollPane2.setViewportView(Aes_decode);
         hint = new JLabel();
         hint.setForeground(new Color(-4511199));

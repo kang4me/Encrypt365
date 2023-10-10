@@ -12,6 +12,7 @@ package com.kang.service;
 
 import com.kang.entity.RsaEntity;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -20,4 +21,6 @@ public interface RsaCreate {
     public RsaEntity Create(RsaEntity rsaEntity) throws NoSuchAlgorithmException;
     public String publicKeyToPEM(PublicKey publicKey) throws Exception;
     public String privateKeyToPEM(PrivateKey privateKey) throws Exception;
+    public String getPrivateKeyAsPem(PrivateKey privateKey) throws IOException;
+    public String getPublicKeyAsPem(PublicKey publicKey) throws IOException;
 }

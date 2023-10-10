@@ -12,10 +12,14 @@ package com.kang;
 
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
-import com.kang.config.ConfigFile;
+import com.google.inject.Guice;
+import com.kang.burpApi.contextMenuItemsProvider.Encrypt365ContextMenus;
+import burp.api.montoya.ui.editor.extension.ExtensionProvidedHttpRequestEditor;
+import com.kang.config.BillingModules;
 import com.kang.view.MainUI;
 
 public class Encrypt365_Main implements BurpExtension {
+    ExtensionProvidedHttpRequestEditor myExtensionHttpRequestEditor;
     @Override
     public void initialize(MontoyaApi api)
     {
@@ -24,7 +28,10 @@ public class Encrypt365_Main implements BurpExtension {
         api.logging().logToOutput("[+]  load successful!      ");
         api.logging().logToOutput("[+]  code by Kang          ");
         api.logging().logToOutput("===========================");
-        api.userInterface().registerSuiteTab("Encrypt365", new MainUI(api).root);
+        MainUI mainUI = new MainUI( api, Guice.createInjector(new BillingModules()));
+        api.userInterface().registerSuiteTab("Encrypt365", mainUI.UI);
+        //Registration registerPayloadProcessor(PayloadProcessor payloadProcessor)注册一个 PayloadProcessor
+        //api.intruder().registerPayloadGeneratorProvider(new MyPayloadGeneratorProvider());
+        api.userInterface().registerContextMenuItemsProvider(new Encrypt365ContextMenus( api, mainUI));
     }
-
 }

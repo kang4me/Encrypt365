@@ -11,8 +11,13 @@
 package com.kang.view.baseui;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.logging.Logging;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.kang.entity.BaseEntity;
+import com.kang.entity.HistoryEntity;
 import com.kang.service.BaseEncrypt;
-import com.kang.service.Impl.BaseEncryptImpl;
+import com.kang.service.History;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,87 +27,123 @@ public class BaseUI {
     public JPanel UI;
     private JComboBox<String> base_ComboBox;
     private JButton encode_Button;
-    private JTextArea base_encode;
+    public JTextArea base_encode;
     private JTextArea base_decode;
     private JButton decode_Button;
-    private JScrollPane JS;
-    private final BaseEncrypt base_encrypt = new BaseEncryptImpl();
+    private JScrollPane JSencode;
+    private JScrollPane JSdecode;
+    @Inject
+    private final BaseEncrypt base_encrypt;
+    private JPopupMenu pop;
+    private final BaseEntity baseEntity = new BaseEntity();
+    private final String[] str = {"Base64编码", "Base32编码", "Base16编码", "Base58编码", "Base91编码"};
+    private final Logging log;
+    @Inject
+    private HistoryEntity historyEntity;
+    @Inject
+    private History history;
 
-    public BaseUI(MontoyaApi api) {
-        String[] str = {"Base64编码", "Base32编码", "Base16编码", "Base58编码", "Base91编码"};
+    public BaseUI(MontoyaApi api, Injector injector) {
+        log = api.logging();
+        base_encrypt = injector.getInstance(BaseEncrypt.class);
+        history = injector.getInstance(History.class);
+        historyEntity = injector.getInstance(HistoryEntity.class);
+        
+        //设置选项卡
         for (String value : str) {
             base_ComboBox.addItem(value);
         }
 
         this.encode_Button.addActionListener((e) -> {
+            setEntity();
             encode_Button();
+            historyEntity.setBaseEntity(baseEntity);
+            history.baseHistory(injector);
         });
         this.decode_Button.addActionListener((e) -> {
+            setEntity();
             decode_Button();
+            historyEntity.setBaseEntity(baseEntity);
+            history.baseHistory(injector);
         });
     }
 
+    /**
+     * encode_Button
+     * @param 
+     * @return void
+     * @Author: Kang on 2023/10/10 14:44
+     * 加密监听
+     */
     private void encode_Button() {
-        String result = "";
-        String inputString = this.base_encode.getText();
         switch (base_ComboBox.getSelectedIndex()) {
             case 0 ->
                 //Base64
-                    result = base_encrypt.base64_Encode(inputString);
+                baseEntity.setOutput(base_encrypt.base64_Encode(baseEntity.getInput()));
             case 1 ->
                 //Base32
-                    result = base_encrypt.base32_Encode(inputString);
+                baseEntity.setOutput(base_encrypt.base32_Encode(baseEntity.getInput()));
             case 2 -> {
                 //Base16
-                byte[] inputBytes = inputString.getBytes(StandardCharsets.UTF_8);
-                result = base_encrypt.base16_Encode(inputBytes);
+                baseEntity.setOutput(base_encrypt.base16_Encode(baseEntity.getInput().getBytes(StandardCharsets.UTF_8)));
             }
             case 3 ->
                 //Base58
-                    result = base_encrypt.base58_Encode(inputString.getBytes());
+                baseEntity.setOutput(base_encrypt.base58_Encode(baseEntity.getInput().getBytes()));
             case 4 ->
                 //Base91
-                    result = base_encrypt.base91_Encode(inputString.getBytes());
+                baseEntity.setOutput(base_encrypt.base91_Encode(baseEntity.getInput().getBytes()));
         }
-        ;
-        this.base_decode.setText(result);
+        this.base_decode.setText(baseEntity.getOutput());
         this.base_decode.setLineWrap(true);
         this.base_decode.setWrapStyleWord(true);
     }
 
+    /**
+     * decode_Button
+     * @param
+     * @return void
+     * @Author: Kang on 2023/10/10 14:45
+     * 解密监听
+     */
     private void decode_Button() {
-        String result = "";
-        byte[] decodedBytes = null;
-        String inputString = this.base_encode.getText();
         switch (base_ComboBox.getSelectedIndex()) {
-            case 0 ->
+            case 0 -> {
                 //Base64
-                    result = base_encrypt.base64_Decode(inputString);
+                baseEntity.setOutput(base_encrypt.base64_Decode(baseEntity.getInput()));
+            }
             case 1 -> {
                 //Base32
-                decodedBytes = base_encrypt.base32_Decode(inputString);
-                result = new String(decodedBytes, StandardCharsets.UTF_8);
+                baseEntity.setOutput(new String(base_encrypt.base32_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
             }
             case 2 -> {
                 //Base16
-                decodedBytes = base_encrypt.base16_Decode(inputString);
-                result = new String(decodedBytes, StandardCharsets.UTF_8);
+                baseEntity.setOutput(new String(base_encrypt.base16_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
             }
             case 3 -> {
                 //Base58
-                decodedBytes = base_encrypt.base58_Decode(inputString);
-                result = new String(decodedBytes, StandardCharsets.UTF_8);
+                baseEntity.setOutput(new String(base_encrypt.base58_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
             }
             case 4 -> {
                 //Base91
-                decodedBytes = base_encrypt.base91_Decode(result);
-                result = new String(decodedBytes, StandardCharsets.UTF_8);
+                baseEntity.setOutput(new String(base_encrypt.base91_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
             }
         }
-        ;
-        this.base_decode.setText(result);
+        this.base_decode.setText(baseEntity.getOutput());
         this.base_decode.setLineWrap(true);
         this.base_decode.setWrapStyleWord(true);
+    }
+
+    /**
+     * setEntity
+     * @param
+     * @return void
+     * @Author: Kang on 2023/10/10 14:45
+     * 设置数据信息
+     */
+    private void setEntity() {
+        baseEntity.setInput(this.base_encode.getText());
+        baseEntity.setMode(str[base_ComboBox.getSelectedIndex()]);
     }
 
     {
@@ -165,7 +206,7 @@ public class BaseUI {
         gbc.ipady = 10;
         gbc.insets = new Insets(0, 0, 0, 10);
         UI.add(encode_Button, gbc);
-        JS = new JScrollPane();
+        JSencode = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -173,15 +214,16 @@ public class BaseUI {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
-        UI.add(JS, gbc);
+        UI.add(JSencode, gbc);
         base_encode = new JTextArea();
         base_encode.setColumns(0);
         base_encode.setEditable(true);
-        base_encode.setLineWrap(false);
+        base_encode.setLineWrap(true);
         base_encode.setMargin(new Insets(5, 5, 5, 5));
         base_encode.setText("");
-        JS.setViewportView(base_encode);
-        final JScrollPane scrollPane1 = new JScrollPane();
+        base_encode.setWrapStyleWord(true);
+        JSencode.setViewportView(base_encode);
+        JSdecode = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -189,10 +231,12 @@ public class BaseUI {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
-        UI.add(scrollPane1, gbc);
+        UI.add(JSdecode, gbc);
         base_decode = new JTextArea();
+        base_decode.setLineWrap(true);
         base_decode.setText("");
-        scrollPane1.setViewportView(base_decode);
+        base_decode.setWrapStyleWord(true);
+        JSdecode.setViewportView(base_decode);
     }
 
     /**
