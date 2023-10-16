@@ -10,7 +10,11 @@
 
 package com.kang.service;
 
+import com.kang.entity.BaseEntity;
+
 public interface BaseEncrypt {
+    public BaseEntity selecteEncodeMode(Object object);
+    public BaseEntity selecteDecodeMode(Object object);
     public String base64_Encode(String inputString);
     public String base64_Decode(String encodedString);
 

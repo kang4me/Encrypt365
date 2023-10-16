@@ -16,6 +16,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 public interface RsaEncrypt {
+    public RsaEntity selecteEncodeMode(Object object);
+    public RsaEntity selecteDecodeMode(Object object);
     public PrivateKey getPrivateKeyFromPEM(String pemPrivateKey) throws Exception;
     public PublicKey getPublicKeyFromPEM(String pemPublicKey) throws Exception;
     public byte[] encryptWithPublicKey(PublicKey publicKey, RsaEntity rsaEntity) throws Exception;

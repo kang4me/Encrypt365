@@ -15,11 +15,11 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.logging.Logging;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.kang.burpApi.PayloadGeneratorProvider.HashPayloadProcessor;
 import com.kang.config.ConfigFile;
 import com.kang.entity.HistoryEntity;
-import com.kang.entity.Md5Entity;
+import com.kang.entity.HashEntity;
 import com.kang.service.History;
-import com.kang.service.Impl.Md5EncryptApiImpl;
 import com.kang.service.Md5Encrypt;
 import com.kang.service.Md5EncryptApi;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -45,10 +45,11 @@ public class HashUI {
     private JScrollPane JS2;
     private JRadioButton No_vip;
     private JRadioButton Yes_vip;
+    private JButton addIntruderButton;
     private final String[] str = {"MD5-32", "MD5-16", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512"};
     private final String[] link = {"CMD5", "MD5免费在线"};
     private final String[] url = {"https://www.cmd5.com/", "https://www.somd5.com/"};
-    private Md5Entity md5_entity = new Md5Entity();
+    private HashEntity md5_entity = new HashEntity();
     private ConfigFile configFile;
     private final Logging log;
     @Inject
@@ -73,16 +74,21 @@ public class HashUI {
 
         this.Encode_butten.addActionListener((e) -> {
             setMd5_entity();
-            encodeButton();
+            md5_entity = md5_encrypt.selecteEncodeMode(md5_entity);
+            this.outputString_Text.setText(md5_entity.getOutputString());
             historyEntity.setMd5Entity(md5_entity);
             history.hashHistory(injector);
         });
+
         this.Decode_butten.addActionListener((e) -> {
             setMd5_entity();
-            decodeButton();
+            md5_entity = md5_encrypt_api.selecteDecodeMode(md5_entity);
+            this.Log_Text.setText(md5_entity.getLog_Text());
+            this.outputString_Text.setText(md5_entity.getOutputString());
             historyEntity.setMd5Entity(md5_entity);
             history.hashHistory(injector);
         });
+
         this.Save_Button.addActionListener((e) -> {
             configFile = new ConfigFile();
             setMd5_entity();
@@ -90,77 +96,28 @@ public class HashUI {
 
             this.Log_Text.setText(md5_entity.getLog_Text());
         });
-    }
 
-    /**
-     * encodeButton
-     * @param 
-     * @return void
-     * @Author: Kang on 2023/10/10 14:46
-     * 加密监听
-     */
-    private void encodeButton() {
-
-        switch (md5_entity.getHash_ComboBox()) {
-            case 0 ->
-                //MD5-32
-                    md5_entity.setOutputString(md5_encrypt.md5Encode32(md5_entity.getInputString()));
-            case 1 ->
-                //MD5-16
-                    md5_entity.setOutputString(md5_encrypt.md5Encode16(md5_entity.getInputString()));
-            case 2 ->
-                //SHA-1
-                    md5_entity.setOutputString(md5_encrypt.sha1Encode(md5_entity.getInputString()));
-            case 3 ->
-                //SHA-224
-                    md5_entity.setOutputString(md5_encrypt.sha224Encode(md5_entity.getInputString()));
-            case 4 ->
-                //SHA-256
-                    md5_entity.setOutputString(md5_encrypt.sha256Encode(md5_entity.getInputString()));
-            case 5 ->
-                //SHA-384
-                    md5_entity.setOutputString(md5_encrypt.sha384Encode(md5_entity.getInputString()));
-            case 6 ->
-                //SHA-512
-                    md5_entity.setOutputString(md5_encrypt.sha512Encode(md5_entity.getInputString()));
-        }
-        this.outputString_Text.setText(md5_entity.getOutputString());
-        this.outputString_Text.setLineWrap(true);
-        this.outputString_Text.setWrapStyleWord(true);
-    }
-
-    /**
-     * decodeButton
-     * @param 
-     * @return void
-     * @Author: Kang on 2023/10/10 14:47
-     * 解密监听
-     */
-    private void decodeButton() {
-
-        switch (Link_URL.getSelectedIndex()) {
-            case 0 -> {
-                if (this.No_vip.isSelected()) {
-                    md5_entity = md5_encrypt_api.CMD5_url(md5_entity);
-                } else if (this.Yes_vip.isSelected()) {
-                    md5_entity = md5_encrypt_api.CMD5_url_api(md5_entity);
+        this.addIntruderButton.addActionListener((e) -> {
+            String extName = JOptionPane.showInputDialog("请自定义Intruder名称:Encrypt365-*");
+            if (extName != null) {
+                if (extName.length() == 0) {
+                    JOptionPane.showMessageDialog(UI, "名称不可为空!");
+                    return;
                 }
-            }
-            case 1 -> {
-            }
-        }
-        this.Log_Text.setText(md5_entity.getLog_Text());
-        this.Log_Text.setLineWrap(true);
-        this.Log_Text.setWrapStyleWord(true);
+            } else return;
 
-        this.outputString_Text.setText(md5_entity.getOutputString());
-        this.outputString_Text.setLineWrap(true);
-        this.outputString_Text.setWrapStyleWord(true);
+            setMd5_entity();
+            historyEntity.setMd5Entity(md5_entity);
+            api.intruder().registerPayloadProcessor(new HashPayloadProcessor(api, injector, extName));
+        });
+
+
     }
 
     /**
      * iniFile
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:48
      * 初始化配置文件
@@ -174,6 +131,7 @@ public class HashUI {
 
     /**
      * setMd5_entity
+     *
      * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:48
@@ -181,16 +139,21 @@ public class HashUI {
      */
     private void setMd5_entity() {
         md5_entity.setInputString(this.inputString_Text.getText());
-
-        md5_entity.setHash_ComboBox(Hash_ComboBox.getSelectedIndex());
+        md5_entity.setApiName(link[Link_URL.getSelectedIndex()]);
+        md5_entity.setHash_ComboBox(str[Hash_ComboBox.getSelectedIndex()]);
         md5_entity.setUrl_api(url[this.Link_URL.getSelectedIndex()]);
-
+        if (this.No_vip.isSelected()) {
+            md5_entity.setVip(false);
+        } else if (this.Yes_vip.isSelected()) {
+            md5_entity.setVip(true);
+        }
         md5_entity.setEmail_text(this.Email_text.getText());
         md5_entity.setKey_text((this.Key_text.getText()));
     }
 
     /**
      * init
+     *
      * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:48
@@ -233,7 +196,7 @@ public class HashUI {
         UI.setDoubleBuffered(true);
         UI.setFocusable(true);
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -244,67 +207,76 @@ public class HashUI {
         gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel1, gbc);
         JS1 = new JScrollPane();
-        panel1.add(JS1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(JS1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         inputString_Text = new JTextArea();
         inputString_Text.setLineWrap(true);
         inputString_Text.setWrapStyleWord(true);
         JS1.setViewportView(inputString_Text);
         JS2 = new JScrollPane();
-        panel1.add(JS2, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(JS2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         outputString_Text = new JTextArea();
         outputString_Text.setLineWrap(true);
         outputString_Text.setWrapStyleWord(true);
         JS2.setViewportView(outputString_Text);
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         Hash_ComboBox = new JComboBox();
-        panel1.add(Hash_ComboBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Hash_ComboBox.setPreferredSize(new Dimension(200, 30));
+        panel2.add(Hash_ComboBox);
         Encode_butten = new JButton();
         Encode_butten.setText("加密");
-        panel1.add(Encode_butten, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(9, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.add(Encode_butten);
+        addIntruderButton = new JButton();
+        addIntruderButton.setText("添加Intruder");
+        panel2.add(addIntruderButton);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(9, 3, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
-        UI.add(panel2, gbc);
+        UI.add(panel3, gbc);
         Link_URL = new JComboBox();
-        panel2.add(Link_URL, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(Link_URL, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Email_text = new JTextField();
-        panel2.add(Email_text, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel3.add(Email_text, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         Key_text = new JTextField();
-        panel2.add(Key_text, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel3.add(Key_text, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         Save_Button = new JButton();
         Save_Button.setText("保存");
-        panel2.add(Save_Button, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(Save_Button, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Reset_Button = new JButton();
         Reset_Button.setText("重置");
-        panel2.add(Reset_Button, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(Reset_Button, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel2.add(scrollPane1, new GridConstraints(8, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(scrollPane1, new GridConstraints(8, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Log_Text = new JTextArea();
+        Log_Text.setLineWrap(true);
+        Log_Text.setWrapStyleWord(true);
         scrollPane1.setViewportView(Log_Text);
         final JLabel label1 = new JLabel();
         label1.setText("email：");
-        panel2.add(label1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(label1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("key：");
-        panel2.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setText("日志：");
-        panel2.add(label3, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(label3, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setText("接口：");
-        panel2.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Decode_butten = new JButton();
         Decode_butten.setText("解密");
-        panel2.add(Decode_butten, new GridConstraints(6, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(Decode_butten, new GridConstraints(6, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         No_vip = new JRadioButton();
         No_vip.setText("免费接口(有限制)");
-        panel2.add(No_vip, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(No_vip, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Yes_vip = new JRadioButton();
         Yes_vip.setText("付费接口");
-        panel2.add(Yes_vip, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(Yes_vip, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
         label5.setText("说明：");
         gbc = new GridBagConstraints();

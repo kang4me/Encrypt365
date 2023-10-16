@@ -10,14 +10,15 @@
 
 package com.kang.service;
 
-import com.kang.entity.Md5Entity;
+import com.kang.entity.HashEntity;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
 public interface Md5EncryptApi {
-    public Md5Entity CMD5_url_api(Md5Entity md5_entity);
-    public Md5Entity CMD5_url(Md5Entity md5_entity);
+    public HashEntity selecteDecodeMode(Object object);
+    public HashEntity CMD5_url_api(HashEntity md5_entity);
+    public HashEntity CMD5_url(HashEntity md5_entity);
     public String requestGet(String inputString, String link_url) throws IOException;
     public void HttpConnection(HttpURLConnection connection);
     public String extractValue(String html, String name);

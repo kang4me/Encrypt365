@@ -11,6 +11,7 @@
 package com.kang.view.aesui;
 
 
+import javax.crypto.BadPaddingException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -18,8 +19,10 @@ import java.awt.event.FocusListener;
 
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.logging.Logging;
+import cn.hutool.crypto.CryptoException;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.kang.burpApi.PayloadGeneratorProvider.AesPayloadProcessor;
 import com.kang.entity.AesEntity;
 import com.kang.entity.HistoryEntity;
 import com.kang.service.AesEncrypt;
@@ -29,7 +32,6 @@ import cn.hutool.crypto.Padding;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.kang.service.Impl.AesEncryptImpl;
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
@@ -51,6 +53,7 @@ public class AesUI {
     private JPanel JPanel2;
     private JPanel JPanel3;
     private JPanel JPanel4;
+    private JButton addIntruderButton;
     private AesEncrypt aes_encrypt;
     private final AesEntity aes_entity = new AesEntity();
     private final Logging log;
@@ -65,7 +68,7 @@ public class AesUI {
         historyEntity = injector.getInstance(HistoryEntity.class);
 
         init();//初始化数据
-        
+
         this.AES_Encode_Button.addActionListener((e) -> {
             aesEntity();//设置输入数据
             aes_encrypt = new AesEncryptImpl(aes_entity);
@@ -80,16 +83,42 @@ public class AesUI {
             historyEntity.setAesEntity(aes_entity);
             history.aesHistory(injector);
         });
+
+        this.addIntruderButton.addActionListener((e) -> {
+            aesEntity();
+
+            if (aes_entity.getKey().equals("请输入密码!")) {
+                JOptionPane.showMessageDialog(UI, "密码不能为空！");
+                return;
+            }
+
+            String extName = JOptionPane.showInputDialog("请自定义Intruder名称:Encrypt365-*");
+            if (extName != null) {
+                if (extName.length() == 0) {
+                    JOptionPane.showMessageDialog(UI, "名称不可为空!");
+                    return;
+                }
+            } else return;
+
+            historyEntity.setAesEntity(aes_entity);
+            api.intruder().registerPayloadProcessor(new AesPayloadProcessor(api, injector, extName));
+        });
+
     }
 
     /**
      * Encode_modeSelected
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:37
      * 加密监听方法体
      */
     private void Encode_modeSelected() {
+        if (aes_entity.getKey().equals("请输入密码!") || aes_entity.getKey().equals("")) {
+            JOptionPane.showMessageDialog(UI, "密码不能为空！");
+            return;
+        }
 
         if (aes_entity.getPadding() == Padding.NoPadding) {
             if ((aes_entity.getInputValue().length() % 16) != 0) {
@@ -117,10 +146,10 @@ public class AesUI {
         }
 
         //输出方式
-        if (Output__Box.getSelectedIndex() == 0) {
+        if (aes_entity.getOutputEncode().equals("0")) {
             aes_entity.setOutputValue(new String(Base64.encodeBase64(bt)));
             Aes_decode.setText(aes_entity.getOutputValue());
-        } else if (Output__Box.getSelectedIndex() == 1) {
+        } else {
             aes_entity.setOutputValue(new String(Hex.encodeHex(bt)));
             Aes_decode.setText(aes_entity.getOutputValue());
         }
@@ -128,33 +157,41 @@ public class AesUI {
 
     /**
      * Decode_modeSelected
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:38
      * 解密监听方法体
      */
     private void Decode_modeSelected() {
+        if (aes_entity.getKey().equals("请输入密码!") || aes_entity.getKey().equals("")) {
+            JOptionPane.showMessageDialog(UI, "密码不能为空！");
+            return;
+        }
+
         //输入方式
         try {
-            if (Output__Box.getSelectedIndex() == 0) {
+/*            if (Output__Box.getSelectedIndex() == 0) {
                 aes_entity.setInputValue(new String(Base64.decodeBase64(aes_entity.getInputValue())));
             } else if (Output__Box.getSelectedIndex() == 1) {
                 aes_entity.setInputValue(new String(Hex.decodeHex(aes_entity.getInputValue())));
+            }*/
+            aes_entity.setOutputValue(aes_encrypt.AES_Decrypt_all());
+            if (aes_entity.getOutputValue() == null || aes_entity.getOutputValue().isEmpty()) {
+                Aes_decode.setText("参数异常，请检查参数");
             }
-        } catch (DecoderException e) {
+        } catch (CryptoException cryptoException) {
+            JOptionPane.showMessageDialog(UI, "密码错误");
+        } catch (Exception e) {
             log.logToError(e);
         }
 
-        aes_entity.setOutputValue(aes_encrypt.AES_Decrypt_all());
-
-        if (aes_entity.getOutputValue() == null || aes_entity.getOutputValue().isEmpty()) {
-            Aes_decode.setText("参数异常，请检查参数");
-        }
         Aes_decode.setText(aes_entity.getOutputValue());
     }
 
     /**
      * aesEntity
+     *
      * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:37
@@ -164,6 +201,7 @@ public class AesUI {
         aes_entity.setInputValue(Aes_encode.getText());
         aes_entity.setKey(Password.getText());
         aes_entity.setIv(iv.getText());
+        aes_entity.setOutputEncode(String.valueOf(Output__Box.getSelectedIndex()));
 
         if (Mode_Box.getSelectedIndex() == 0) {
             aes_entity.setMode(Mode.ECB);
@@ -244,11 +282,11 @@ public class AesUI {
         }
 
         Password.setForeground(Color.gray); //将提示文字设置为灰色
-        Password.setText("请输入密码");     //显示提示文字
+        Password.setText("请输入密码!");     //显示提示文字
         Password.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
                 //得到焦点时，当前文本框的提示文字和创建该对象时的提示文字一样，说明用户正要键入内容
-                if (Password.getText().equals("请输入密码")) {
+                if (Password.getText().equals("请输入密码!")) {
                     Password.setText("");     //将提示文字清空
                     Password.setForeground(Color.black);  //设置用户输入的字体颜色为黑色
                 }
@@ -259,7 +297,7 @@ public class AesUI {
                 //失去焦点时，用户尚未在文本框内输入任何内容，所以依旧显示提示文字
                 if (Password.getText().isEmpty()) {
                     Password.setForeground(Color.gray); //将提示文字设置为灰色
-                    Password.setText("请输入密码");     //显示提示文字
+                    Password.setText("请输入密码!");     //显示提示文字
                 }
             }
         });
@@ -335,7 +373,7 @@ public class AesUI {
         JPanel1.add(label5, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Password = new JTextField();
         Password.setText("");
-        Password.setToolTipText("请输入密码");
+        Password.setToolTipText("请输入密码!");
         JPanel1.add(Password, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(100, -1), null, 0, false));
         iv = new JTextField();
         iv.setToolTipText("iv偏移量，ecb模式不用填写！");
@@ -366,18 +404,24 @@ public class AesUI {
         Aes_encode.setLineWrap(true);
         scrollPane1.setViewportView(Aes_encode);
         JPanel3 = new JPanel();
-        JPanel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        JPanel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.BOTH;
         UI.add(JPanel3, gbc);
         AES_Encode_Button = new JButton();
+        AES_Encode_Button.setPreferredSize(new Dimension(100, 35));
         AES_Encode_Button.setText("AES加密");
-        JPanel3.add(AES_Encode_Button, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 35), null, null, 0, false));
+        JPanel3.add(AES_Encode_Button);
         AES_Decode_Button = new JButton();
+        AES_Decode_Button.setPreferredSize(new Dimension(100, 35));
         AES_Decode_Button.setText("AES解密");
-        JPanel3.add(AES_Decode_Button, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 35), null, null, 0, false));
+        JPanel3.add(AES_Decode_Button);
+        addIntruderButton = new JButton();
+        addIntruderButton.setPreferredSize(new Dimension(120, 35));
+        addIntruderButton.setText("添加Intruder");
+        JPanel3.add(addIntruderButton);
         JPanel4 = new JPanel();
         JPanel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();

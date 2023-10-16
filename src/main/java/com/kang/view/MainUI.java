@@ -10,11 +10,13 @@
 
 package com.kang.view;
 
+import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.kang.Encrypt365;
 import com.kang.entity.EnumEntity;
 import com.kang.view.rewrite.TabbedMenu;
 import com.kang.util.Utils;
@@ -109,6 +111,7 @@ public class MainUI {
 
     /**
      * addTable
+     *
      * @param UI
      * @param title
      * @return void
@@ -162,7 +165,8 @@ public class MainUI {
 
     /**
      * init
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 15:01
      * 初始化
@@ -216,7 +220,6 @@ public class MainUI {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel1, gbc);
         final JScrollPane scrollPane1 = new JScrollPane();
         panel1.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, 1, 1, null, null, null, 0, false));

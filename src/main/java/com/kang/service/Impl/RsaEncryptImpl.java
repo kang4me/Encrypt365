@@ -10,9 +10,11 @@
 
 package com.kang.service.Impl;
 
+import com.kang.entity.BaseEntity;
 import com.kang.entity.RsaEntity;
 import com.kang.service.RsaEncrypt;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Cipher;
 import java.nio.charset.Charset;
@@ -21,8 +23,44 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Objects;
 
 public class RsaEncryptImpl implements RsaEncrypt {
+
+    public RsaEntity selecteEncodeMode(Object object){
+        RsaEntity rsaEntity = (RsaEntity) object;
+        try {
+            byte[] encryptedData;
+            if (rsaEntity.isSelectedRadio()) {
+                encryptedData = encryptWithPublicKey(getPublicKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity);
+            }else {
+                encryptedData = encryptWithPrivateKey(getPrivateKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity);
+            }
+
+            if (rsaEntity.getOutPut().equals("0")) {
+                rsaEntity.setOutputValue(new String(Objects.requireNonNull(Base64.encodeBase64(encryptedData))));
+            } else if(rsaEntity.getOutPut().equals("1")){
+                rsaEntity.setOutputValue(new String(Hex.encodeHex(encryptedData)));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return rsaEntity;
+    }
+    public RsaEntity selecteDecodeMode(Object object){
+        RsaEntity rsaEntity = (RsaEntity) object;
+        try {
+            if (rsaEntity.isSelectedRadio()) {
+                rsaEntity.setOutputValue(decodeWithPublicKey(getPublicKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity));
+            } else {
+                rsaEntity.setOutputValue(decodeWithPrivateKey(getPrivateKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return rsaEntity;
+    }
+
     /**
      * 过滤秘钥头尾部
      * @param pemPrivateKey

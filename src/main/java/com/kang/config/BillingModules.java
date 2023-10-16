@@ -25,7 +25,6 @@ public class BillingModules extends AbstractModule {
      * @Author: Kang on 2023/10/10 14:04
      * Guice注入 配置信息
      */
-
     protected void configure(){
         bind(BaseEncrypt.class).to(BaseEncryptImpl.class).in(Scopes.SINGLETON);
         bind(Md5Encrypt.class).to(Md5EncryptImpl.class).in(Scopes.SINGLETON);

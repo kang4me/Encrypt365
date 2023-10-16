@@ -34,6 +34,9 @@ public class HistoryImpl implements History {
     public void baseHistory(Injector injector){
         history = injector.getInstance(historyUI.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getBaseEntity().getInput().isEmpty() && historyEntity.getBaseEntity().getOutput().isEmpty()){
+            return;
+        }
         history.all.insertRow(0,new Object[]{
                 historyEntity.id,
                 EnumEntity.Base,
@@ -60,6 +63,10 @@ public class HistoryImpl implements History {
     public void hashHistory(Injector injector){
         history = injector.getInstance(historyUI.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getMd5Entity().getInputString().isEmpty() && historyEntity.getMd5Entity().getOutputString().isEmpty()){
+            return;
+        }
+
         history.all.insertRow(0,new Object[]{
                 historyEntity.id,
                 EnumEntity.Hash,
@@ -86,6 +93,9 @@ public class HistoryImpl implements History {
     public void aesHistory(Injector injector){
         history = injector.getInstance(historyUI.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getAesEntity().getInputValue().isEmpty() && historyEntity.getAesEntity().getOutputValue().isEmpty()){
+            return;
+        }
         history.all.insertRow(0,new Object[]{
                 historyEntity.id,
                 EnumEntity.Aes,
@@ -112,6 +122,9 @@ public class HistoryImpl implements History {
     public void rsaCreateHistory(Injector injector){
         history = injector.getInstance(historyUI.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getRsaEntity().getPublicKey().isEmpty() && historyEntity.getRsaEntity().getPrivateKey().isEmpty()){
+            return;
+        }
         history.all.insertRow(0,new Object[]{
                 historyEntity.id,
                 EnumEntity.Rsa生成,
@@ -138,6 +151,9 @@ public class HistoryImpl implements History {
     public void rsaEncryptHistory(Injector injector){
         history = injector.getInstance(historyUI.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getRsaEntity().getTextValue().isEmpty() && historyEntity.getRsaEntity().getOutputValue().isEmpty() && historyEntity.getRsaEntity().getPublicKey().isEmpty()){
+            return;
+        }
         history.all.insertRow(0,new Object[]{
                 historyEntity.id,
                 EnumEntity.Rsa加解密,

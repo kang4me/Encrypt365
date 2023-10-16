@@ -10,7 +10,7 @@
 
 package com.kang.service.Impl;
 
-import cn.hutool.core.codec.Base32;
+import com.kang.entity.BaseEntity;
 import com.kang.service.BaseEncrypt;
 
 import java.math.BigInteger;
@@ -18,6 +18,49 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class BaseEncryptImpl implements BaseEncrypt {
+
+    public BaseEntity selecteEncodeMode(Object object){
+        BaseEntity baseEntity = (BaseEntity) object;
+        switch (baseEntity.getMode()) {
+            case "Base64编码" ->
+                //Base64
+                    baseEntity.setOutput(base64_Encode(baseEntity.getInput()));
+            case "Base32编码" ->
+                //Base32
+                    baseEntity.setOutput(base32_Encode(baseEntity.getInput()));
+            case "Base16编码" ->
+                //Base16
+                baseEntity.setOutput(base16_Encode(baseEntity.getInput().getBytes(StandardCharsets.UTF_8)));
+            case "Base58编码" ->
+                //Base58
+                    baseEntity.setOutput(base58_Encode(baseEntity.getInput().getBytes()));
+            case "Base91编码" ->
+                //Base91
+                    baseEntity.setOutput(base91_Encode(baseEntity.getInput().getBytes()));
+        }
+        return baseEntity;
+    }
+    public BaseEntity selecteDecodeMode(Object object){
+        BaseEntity baseEntity = (BaseEntity) object;
+        switch (baseEntity.getMode()) {
+            case "Base64编码" ->
+                //Base64
+                baseEntity.setOutput(base64_Decode(baseEntity.getInput()));
+            case "Base32编码" ->
+                //Base32
+                baseEntity.setOutput(new String(base32_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
+            case "Base16编码" ->
+                //Base16
+                baseEntity.setOutput(new String(base16_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
+            case "Base58编码" ->
+                //Base58
+                baseEntity.setOutput(new String(base58_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
+            case "Base91编码" ->
+                //Base91
+                baseEntity.setOutput(new String(base91_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
+        }
+        return baseEntity;
+    }
 
     /**
      * base64_Encode

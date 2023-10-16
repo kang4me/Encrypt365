@@ -49,6 +49,31 @@ public class AesEncryptImpl implements AesEncrypt {
     }
 
     /**
+     * padKeyTo128_192_256Bits
+     * @param originalKey
+     * @param size
+     * @return byte[]
+     * @Author: Kang on 2023/10/10 14:16
+     * 数据位数选择
+     */
+    public byte[] padKeyTo128_192_256Bits(String originalKey, int size) {
+        byte[] keyBytes = originalKey.getBytes(Charset.forName(aes_entity.getCharset()));
+
+        // 创建一个16字节的数组，用于存储填充后的秘钥
+        byte[] paddedKey = new byte[size];
+
+        // 将原始秘钥的字节循环复制到填充后的秘钥数组，同时处理超出16字节长度的情况
+        for (int i = 0; i < size; i++) {
+            if (i < keyBytes.length) {
+                paddedKey[i] = keyBytes[i];
+            } else {
+                paddedKey[i] = (byte) 0x00; // 使用0x00填充
+            }
+        }
+        return paddedKey;
+    }
+
+    /**
      * 封印
      */
 /*    //PKCS7Padding
@@ -84,28 +109,5 @@ public class AesEncryptImpl implements AesEncrypt {
      */
 
 
-    /**
-     * padKeyTo128_192_256Bits
-     * @param originalKey
-     * @param size
-     * @return byte[]
-     * @Author: Kang on 2023/10/10 14:16
-     * 数据位数选择
-     */
-    public byte[] padKeyTo128_192_256Bits(String originalKey, int size) {
-        byte[] keyBytes = originalKey.getBytes(Charset.forName(aes_entity.getCharset()));
 
-        // 创建一个16字节的数组，用于存储填充后的秘钥
-        byte[] paddedKey = new byte[size];
-
-        // 将原始秘钥的字节循环复制到填充后的秘钥数组，同时处理超出16字节长度的情况
-        for (int i = 0; i < size; i++) {
-            if (i < keyBytes.length) {
-                paddedKey[i] = keyBytes[i];
-            } else {
-                paddedKey[i] = (byte) 0x00; // 使用0x00填充
-            }
-        }
-        return paddedKey;
-    }
 }

@@ -17,7 +17,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.kang.entity.EnumEntity;
 import com.kang.entity.HistoryEntity;
-import com.kang.util.DateUtils;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -27,12 +26,12 @@ import javax.swing.table.JTableHeader;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.Locale;
-import java.util.Objects;
 
 public class historyUI {
     public JPanel UI;
     public JTable table1;
     private JList<EnumEntity> list1;
+    private JButton empty;
     public DefaultTableModel all = new DefaultTableModel();
     private final String[] column_names = {"#", "加/解密模式", "原文/公钥", "结果/私钥", "密码/公私钥", "时间"};
     private Injector injector;
@@ -43,6 +42,11 @@ public class historyUI {
     public historyUI() {
 
         ini();
+
+        empty.addActionListener(e -> {
+            historyEntity.data.clear();
+            all.setRowCount(0);//清除table
+        });
 
         //判断当前list选项，并设置Table
         list1.addListSelectionListener(e -> {
@@ -94,7 +98,8 @@ public class historyUI {
 
     /**
      * ini
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:50
      * 初始化
@@ -134,6 +139,7 @@ public class historyUI {
 
     /**
      * setInjector
+     *
      * @param injector
      * @param logging
      * @return void
@@ -163,7 +169,7 @@ public class historyUI {
         UI = new JPanel();
         UI.setLayout(new GridBagLayout());
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -173,8 +179,11 @@ public class historyUI {
         gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel1, gbc);
         final JLabel label1 = new JLabel();
-        label1.setText("日志：");
+        label1.setText("记录：");
         panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        empty = new JButton();
+        empty.setText("清空");
+        panel1.add(empty, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();

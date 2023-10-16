@@ -94,6 +94,7 @@ public class Encrypt365ContextMenus implements ContextMenuItemsProvider {
             RsaCreateUi baseUI = new RsaCreateUi(api, mainUI.injector);
             mainUI.addTable(baseUI.UI, EnumEntity.Rsa生成.name());
         });
+
         return menus;
     }
 

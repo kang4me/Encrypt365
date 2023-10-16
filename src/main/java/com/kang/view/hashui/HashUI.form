@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.kang.view.hashui.HashUI">
   <grid id="27dc6" binding="UI" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="2" y="4" width="453" height="322"/>
+      <xy x="2" y="4" width="635" height="340"/>
     </constraints>
     <properties>
       <alignmentX value="0.0"/>
@@ -12,7 +12,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="4a81a" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="4a81a" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -23,7 +23,7 @@
         <children>
           <scrollpane id="f87b" binding="JS1">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -39,7 +39,7 @@
           </scrollpane>
           <scrollpane id="46192" binding="JS2">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -53,20 +53,33 @@
               </component>
             </children>
           </scrollpane>
-          <component id="d1953" class="javax.swing.JComboBox" binding="Hash_ComboBox">
+          <grid id="a53db" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-          </component>
-          <component id="800ee" class="javax.swing.JButton" binding="Encode_butten">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="加密"/>
-            </properties>
-          </component>
+            <border type="none"/>
+            <children>
+              <component id="d1953" class="javax.swing.JComboBox" binding="Hash_ComboBox">
+                <constraints/>
+                <properties>
+                  <preferredSize width="200" height="30"/>
+                </properties>
+              </component>
+              <component id="800ee" class="javax.swing.JButton" binding="Encode_butten">
+                <constraints/>
+                <properties>
+                  <text value="加密"/>
+                </properties>
+              </component>
+              <component id="2d53c" class="javax.swing.JButton" binding="addIntruderButton">
+                <constraints/>
+                <properties>
+                  <text value="添加Intruder"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
       <grid id="b32fe" layout-manager="GridLayoutManager" row-count="9" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

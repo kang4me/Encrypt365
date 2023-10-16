@@ -26,6 +26,7 @@ public class RsaEntity {
     private String textValue;
     private String keyFormat;
     private String outputValue;
+    private boolean selectedRadio;
 
     public String getPublicKey() {
         return publicKey;
@@ -121,5 +122,13 @@ public class RsaEntity {
 
     public void setOutputValue(String outputValue) {
         this.outputValue = outputValue;
+    }
+
+    public boolean isSelectedRadio() {
+        return selectedRadio;
+    }
+
+    public void setSelectedRadio(boolean selectedRadio) {
+        this.selectedRadio = selectedRadio;
     }
 }

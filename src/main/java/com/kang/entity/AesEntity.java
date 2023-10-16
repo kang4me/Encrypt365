@@ -23,7 +23,7 @@ public class AesEntity {
     private String charset;
     private String inputValue;
     private String outputValue;
-
+    private String outputEncode;
     public Mode getMode() {
         return mode;
     }
@@ -94,5 +94,13 @@ public class AesEntity {
 
     public void setOutputValue(String outputValue) {
         this.outputValue = outputValue;
+    }
+
+    public String getOutputEncode() {
+        return outputEncode;
+    }
+
+    public void setOutputEncode(String outputEncode) {
+        this.outputEncode = outputEncode;
     }
 }

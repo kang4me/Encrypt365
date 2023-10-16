@@ -14,14 +14,17 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.logging.Logging;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.kang.burpApi.PayloadGeneratorProvider.BasePayloadProcessor;
 import com.kang.entity.BaseEntity;
+import com.kang.entity.EnumEntity;
 import com.kang.entity.HistoryEntity;
 import com.kang.service.BaseEncrypt;
 import com.kang.service.History;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.charset.StandardCharsets;
 
 public class BaseUI {
     public JPanel UI;
@@ -32,10 +35,11 @@ public class BaseUI {
     private JButton decode_Button;
     private JScrollPane JSencode;
     private JScrollPane JSdecode;
+    private JButton addIntruder;
     @Inject
     private final BaseEncrypt base_encrypt;
     private JPopupMenu pop;
-    private final BaseEntity baseEntity = new BaseEntity();
+    private BaseEntity baseEntity = new BaseEntity();
     private final String[] str = {"Base64编码", "Base32编码", "Base16编码", "Base58编码", "Base91编码"};
     private final Logging log;
     @Inject
@@ -48,7 +52,6 @@ public class BaseUI {
         base_encrypt = injector.getInstance(BaseEncrypt.class);
         history = injector.getInstance(History.class);
         historyEntity = injector.getInstance(HistoryEntity.class);
-        
         //设置选项卡
         for (String value : str) {
             base_ComboBox.addItem(value);
@@ -56,86 +59,36 @@ public class BaseUI {
 
         this.encode_Button.addActionListener((e) -> {
             setEntity();
-            encode_Button();
+            baseEntity = base_encrypt.selecteEncodeMode(baseEntity);
+            this.base_decode.setText(baseEntity.getOutput());
             historyEntity.setBaseEntity(baseEntity);
             history.baseHistory(injector);
         });
         this.decode_Button.addActionListener((e) -> {
             setEntity();
-            decode_Button();
+            baseEntity = base_encrypt.selecteDecodeMode(baseEntity);
+            this.base_decode.setText(baseEntity.getOutput());
             historyEntity.setBaseEntity(baseEntity);
             history.baseHistory(injector);
+        });
+        this.addIntruder.addActionListener((e) -> {
+            String extName = JOptionPane.showInputDialog("请自定义Intruder名称:Encrypt365-*");
+            if (extName != null) {
+                if (extName.length() == 0) {
+                    JOptionPane.showMessageDialog(UI, "名称不可为空!");
+                    return;
+                }
+            } else return;
+
+            setEntity();
+            historyEntity.setBaseEntity(baseEntity);
+            api.intruder().registerPayloadProcessor(new BasePayloadProcessor(api, injector, extName));
         });
     }
 
     /**
-     * encode_Button
-     * @param 
-     * @return void
-     * @Author: Kang on 2023/10/10 14:44
-     * 加密监听
-     */
-    private void encode_Button() {
-        switch (base_ComboBox.getSelectedIndex()) {
-            case 0 ->
-                //Base64
-                baseEntity.setOutput(base_encrypt.base64_Encode(baseEntity.getInput()));
-            case 1 ->
-                //Base32
-                baseEntity.setOutput(base_encrypt.base32_Encode(baseEntity.getInput()));
-            case 2 -> {
-                //Base16
-                baseEntity.setOutput(base_encrypt.base16_Encode(baseEntity.getInput().getBytes(StandardCharsets.UTF_8)));
-            }
-            case 3 ->
-                //Base58
-                baseEntity.setOutput(base_encrypt.base58_Encode(baseEntity.getInput().getBytes()));
-            case 4 ->
-                //Base91
-                baseEntity.setOutput(base_encrypt.base91_Encode(baseEntity.getInput().getBytes()));
-        }
-        this.base_decode.setText(baseEntity.getOutput());
-        this.base_decode.setLineWrap(true);
-        this.base_decode.setWrapStyleWord(true);
-    }
-
-    /**
-     * decode_Button
-     * @param
-     * @return void
-     * @Author: Kang on 2023/10/10 14:45
-     * 解密监听
-     */
-    private void decode_Button() {
-        switch (base_ComboBox.getSelectedIndex()) {
-            case 0 -> {
-                //Base64
-                baseEntity.setOutput(base_encrypt.base64_Decode(baseEntity.getInput()));
-            }
-            case 1 -> {
-                //Base32
-                baseEntity.setOutput(new String(base_encrypt.base32_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
-            }
-            case 2 -> {
-                //Base16
-                baseEntity.setOutput(new String(base_encrypt.base16_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
-            }
-            case 3 -> {
-                //Base58
-                baseEntity.setOutput(new String(base_encrypt.base58_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
-            }
-            case 4 -> {
-                //Base91
-                baseEntity.setOutput(new String(base_encrypt.base91_Decode(baseEntity.getInput()), StandardCharsets.UTF_8));
-            }
-        }
-        this.base_decode.setText(baseEntity.getOutput());
-        this.base_decode.setLineWrap(true);
-        this.base_decode.setWrapStyleWord(true);
-    }
-
-    /**
      * setEntity
+     *
      * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:45
@@ -145,6 +98,7 @@ public class BaseUI {
         baseEntity.setInput(this.base_encode.getText());
         baseEntity.setMode(str[base_ComboBox.getSelectedIndex()]);
     }
+
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer
@@ -163,58 +117,18 @@ public class BaseUI {
     private void $$$setupUI$$$() {
         UI = new JPanel();
         UI.setLayout(new GridBagLayout());
-        base_ComboBox = new JComboBox();
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(5, 5, 5, 5), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.ipadx = 150;
-        gbc.ipady = 10;
-        gbc.insets = new Insets(3, 5, 3, 5);
-        UI.add(base_ComboBox, gbc);
-        decode_Button = new JButton();
-        decode_Button.setHideActionText(false);
-        decode_Button.setHorizontalAlignment(0);
-        decode_Button.setHorizontalTextPosition(11);
-        decode_Button.setText("解密");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        gbc.weightx = 55.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.ipadx = 50;
-        gbc.ipady = 10;
-        UI.add(decode_Button, gbc);
-        encode_Button = new JButton();
-        encode_Button.setEnabled(true);
-        encode_Button.setHideActionText(false);
-        encode_Button.setHorizontalAlignment(0);
-        encode_Button.setHorizontalTextPosition(11);
-        encode_Button.setText("加密");
-        encode_Button.setVerticalAlignment(0);
-        encode_Button.setVerticalTextPosition(0);
-        encode_Button.putClientProperty("hideActionText", Boolean.FALSE);
-        encode_Button.putClientProperty("html.disable", Boolean.FALSE);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.ipadx = 50;
-        gbc.ipady = 10;
-        gbc.insets = new Insets(0, 0, 0, 10);
-        UI.add(encode_Button, gbc);
-        JSencode = new JScrollPane();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        UI.add(JSencode, gbc);
+        UI.add(panel1, gbc);
+        JSencode = new JScrollPane();
+        panel1.add(JSencode, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 150), null, 0, false));
         base_encode = new JTextArea();
         base_encode.setColumns(0);
         base_encode.setEditable(true);
@@ -223,15 +137,55 @@ public class BaseUI {
         base_encode.setText("");
         base_encode.setWrapStyleWord(true);
         JSencode.setViewportView(base_encode);
-        JSdecode = new JScrollPane();
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        UI.add(panel2, gbc);
+        base_ComboBox = new JComboBox();
+        base_ComboBox.setAlignmentY(0.5f);
+        base_ComboBox.setMinimumSize(new Dimension(100, 150));
+        base_ComboBox.setPreferredSize(new Dimension(250, 30));
+        panel2.add(base_ComboBox);
+        encode_Button = new JButton();
+        encode_Button.setEnabled(true);
+        encode_Button.setHideActionText(false);
+        encode_Button.setHorizontalAlignment(0);
+        encode_Button.setHorizontalTextPosition(11);
+        encode_Button.setMinimumSize(new Dimension(150, 35));
+        encode_Button.setPreferredSize(new Dimension(100, 35));
+        encode_Button.setText("加密");
+        encode_Button.setVerticalAlignment(0);
+        encode_Button.setVerticalTextPosition(0);
+        encode_Button.putClientProperty("hideActionText", Boolean.FALSE);
+        encode_Button.putClientProperty("html.disable", Boolean.FALSE);
+        panel2.add(encode_Button);
+        decode_Button = new JButton();
+        decode_Button.setHideActionText(false);
+        decode_Button.setHorizontalAlignment(0);
+        decode_Button.setHorizontalTextPosition(11);
+        decode_Button.setMinimumSize(new Dimension(150, 35));
+        decode_Button.setPreferredSize(new Dimension(100, 35));
+        decode_Button.setText("解密");
+        panel2.add(decode_Button);
+        addIntruder = new JButton();
+        addIntruder.setPreferredSize(new Dimension(120, 35));
+        addIntruder.setText("添加Intruder");
+        panel2.add(addIntruder);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(5, 5, 5, 5), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        UI.add(JSdecode, gbc);
+        UI.add(panel3, gbc);
+        JSdecode = new JScrollPane();
+        panel3.add(JSdecode, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 150), null, 0, false));
         base_decode = new JTextArea();
         base_decode.setLineWrap(true);
         base_decode.setText("");

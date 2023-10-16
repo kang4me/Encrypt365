@@ -10,7 +10,7 @@
 
 package com.kang.service.Impl;
 
-import com.kang.entity.Md5Entity;
+import com.kang.entity.HashEntity;
 import com.kang.service.Md5EncryptApi;
 
 import java.io.BufferedReader;
@@ -26,6 +26,22 @@ import java.util.regex.Pattern;
 
 public class Md5EncryptApiImpl implements Md5EncryptApi {
 
+    public HashEntity selecteDecodeMode(Object object){
+        HashEntity md5Entity = (HashEntity) object;
+        switch (md5Entity.getApiName()) {
+            case "CMD5" -> {
+                if (md5Entity.isVip()) {
+                    md5Entity = CMD5_url_api(md5Entity);
+                } else {
+                    md5Entity = CMD5_url(md5Entity);
+                }
+            }
+            case "MD5免费在线" -> {
+            }
+        }
+        return md5Entity;
+    }
+
     /**
      * CMD5_url_api
      * @param md5_entity
@@ -33,7 +49,7 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
      * @Author: Kang on 2023/10/10 14:22
      * cmd5 网页API接口对接
      */
-    public Md5Entity CMD5_url_api(Md5Entity md5_entity) {
+    public HashEntity CMD5_url_api(HashEntity md5_entity) {
         md5_entity.setUrl_api(md5_entity.getUrl_api() + "api.ashx?email=" + md5_entity.getEmail_text() + "&key=" + md5_entity.getKey_text() + "&hash=" + md5_entity.getInputString());
         md5_entity.setOutputString("查询失败，查看日志");
         String log = "";
@@ -112,7 +128,7 @@ public class Md5EncryptApiImpl implements Md5EncryptApi {
      * @Author: Kang on 2023/10/10 14:23
      * 网页请求方式获取解密结果，频率过高会出现验证码验证，未设置验证码识别
      */
-    public Md5Entity CMD5_url(Md5Entity md5_entity) {
+    public HashEntity CMD5_url(HashEntity md5_entity) {
         String log = "";
         md5_entity.setOutputString("查询失败，查看日志");
         try {

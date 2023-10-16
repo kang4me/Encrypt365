@@ -10,6 +10,7 @@
 
 package com.kang.service.Impl;
 
+import com.kang.entity.HashEntity;
 import com.kang.service.Md5Encrypt;
 
 import cn.hutool.crypto.digest.DigestUtil;
@@ -18,6 +19,33 @@ import org.bouncycastle.crypto.digests.SHA384Digest;
 import org.bouncycastle.util.encoders.Hex;
 
 public class Md5EncryptImpl implements Md5Encrypt {
+    public HashEntity selecteEncodeMode(Object object){
+        HashEntity md5Entity = (HashEntity) object;
+        switch (md5Entity.getHash_ComboBox()) {
+            case "MD5-32" ->
+                //MD5-32
+                    md5Entity.setOutputString(md5Encode32(md5Entity.getInputString()));
+            case "MD5-16" ->
+                //MD5-16
+                    md5Entity.setOutputString(md5Encode16(md5Entity.getInputString()));
+            case "SHA-1" ->
+                //SHA-1
+                    md5Entity.setOutputString(sha1Encode(md5Entity.getInputString()));
+            case "SHA-224" ->
+                //SHA-224
+                    md5Entity.setOutputString(sha224Encode(md5Entity.getInputString()));
+            case "SHA-256" ->
+                //SHA-256
+                    md5Entity.setOutputString(sha256Encode(md5Entity.getInputString()));
+            case "SHA-384" ->
+                //SHA-384
+                    md5Entity.setOutputString(sha384Encode(md5Entity.getInputString()));
+            case "SHA-512" ->
+                //SHA-512
+                    md5Entity.setOutputString(sha512Encode(md5Entity.getInputString()));
+        }
+        return md5Entity;
+    }
 
     /**
      * md5Encode32

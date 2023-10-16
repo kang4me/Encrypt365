@@ -10,7 +10,10 @@
 
 package com.kang.service;
 
+import com.kang.entity.HashEntity;
+
 public interface Md5Encrypt {
+    public HashEntity selecteEncodeMode(Object object);
     public String md5Encode32(String inputString);
     public String md5Encode16(String inputString);
     public String sha1Encode(String inputString);

@@ -10,11 +10,10 @@
 
 package com.kang.config;
 
-import com.kang.entity.Md5Entity;
+import com.kang.entity.HashEntity;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public class ConfigFile {
      * @Author: Kang on 2023/10/10 14:05
      * 创建文件
      */
-    public Md5Entity getConfig(Md5Entity md5Entity){
+    public HashEntity getConfig(HashEntity md5Entity){
         String log = null;
         Properties prop = new Properties();
         InputStream in = null;
@@ -61,7 +60,7 @@ public class ConfigFile {
      * @Author: Kang on 2023/10/10 14:14
      * 保存文件
      */
-    public String save(Md5Entity md5Entity){
+    public String save(HashEntity md5Entity){
         Properties prop = new Properties();
         ///保存属性到b.properties文件
         FileOutputStream oFile = null;//true表示追加打开

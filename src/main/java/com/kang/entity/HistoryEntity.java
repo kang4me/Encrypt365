@@ -18,7 +18,7 @@ public class HistoryEntity {
     public List<Object[]> data = new ArrayList<>();
     private AesEntity aesEntity;
     private BaseEntity baseEntity;
-    private Md5Entity md5Entity;
+    private HashEntity md5Entity;
     private RsaEntity rsaEntity;
 
     public AesEntity getAesEntity() {
@@ -37,11 +37,11 @@ public class HistoryEntity {
         this.baseEntity = baseEntity;
     }
 
-    public Md5Entity getMd5Entity() {
+    public HashEntity getMd5Entity() {
         return md5Entity;
     }
 
-    public void setMd5Entity(Md5Entity md5Entity) {
+    public void setMd5Entity(HashEntity md5Entity) {
         this.md5Entity = md5Entity;
     }
 

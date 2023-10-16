@@ -15,6 +15,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.kang.burpApi.PayloadGeneratorProvider.AesPayloadProcessor;
+import com.kang.burpApi.PayloadGeneratorProvider.RsaPayloadProcessor;
 import com.kang.entity.HistoryEntity;
 import com.kang.entity.RsaEntity;
 import com.kang.service.History;
@@ -41,9 +43,10 @@ public class RsaEncryptUI {
     private JComboBox<String> charset_Box;
     private JRadioButton publicKeyRadio;
     private JRadioButton privateKeyRadio;
+    private JButton addIntruderButton;
     @Inject
     private final RsaEncrypt rsaPublicKeyEncrypt;
-    private final RsaEntity rsaEntity = new RsaEntity();
+    private RsaEntity rsaEntity = new RsaEntity();
     private final MontoyaApi api;
     @Inject
     private HistoryEntity historyEntity;
@@ -59,74 +62,42 @@ public class RsaEncryptUI {
 
         this.encodeButton.addActionListener(e -> {
             setEntity();
-            encodeButton();
+            this.outputValue.setText(rsaPublicKeyEncrypt.selecteEncodeMode(rsaEntity).getOutputValue());
             historyEntity.setRsaEntity(rsaEntity);
             history.rsaEncryptHistory(injector);
         });
         this.decodeButton.addActionListener(e -> {
             setEntity();
-            decodeButton();
+            this.outputValue.setText(rsaPublicKeyEncrypt.selecteDecodeMode(rsaEntity).getOutputValue());
             historyEntity.setRsaEntity(rsaEntity);
             history.rsaEncryptHistory(injector);
+        });
+
+        this.addIntruderButton.addActionListener((e) -> {
+            if (this.publicOrPrivate.getText().equals("公钥：（以“-----BEGIN PUBLIC KEY-----”开头 “-----END PUBLIC KEY-----” 结尾）\n"
+                    + "私钥：（以”-----BEGIN PRIVATE KEY-----”开头 “-----END PRIVATE KEY-----“ 结尾）"
+                    + " or （以”-----BEGIN RSA PRIVATE KEY-----”开头 “-----END RSA PRIVATE KEY-----“ 结尾）")) {
+                JOptionPane.showMessageDialog(UI, "先存放公私钥，并确保模式正确！");
+                return;
+            }
+            String extName = JOptionPane.showInputDialog("请自定义Intruder名称:Encrypt365-*");
+            if (extName != null) {
+                if (extName.length() == 0) {
+                    JOptionPane.showMessageDialog(UI, "名称不可为空!");
+                    return;
+                }
+            } else return;
+
+            setEntity();
+            historyEntity.setRsaEntity(rsaEntity);
+            api.intruder().registerPayloadProcessor(new RsaPayloadProcessor(api, injector, extName));
         });
 
     }
 
     /**
-     * encodeButton
-     * @param
-     * @return void
-     * @Author: Kang on 2023/10/10 14:42
-     * 加密监听方法
-     */
-    private void encodeButton() {
-        try {
-            byte[] encryptedData = null;
-            if (publicKeyRadio.isSelected()) {
-                encryptedData = rsaPublicKeyEncrypt.encryptWithPublicKey(rsaPublicKeyEncrypt.getPublicKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity);
-            }
-            if (privateKeyRadio.isSelected()) {
-                encryptedData = rsaPublicKeyEncrypt.encryptWithPrivateKey(rsaPublicKeyEncrypt.getPrivateKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity);
-            }
-
-            if (outPut.getSelectedIndex() == 0) {
-                rsaEntity.setOutputValue(new String(Objects.requireNonNull(Base64.encodeBase64(encryptedData))));
-            } else if (outPut.getSelectedIndex() == 0) {
-                if (encryptedData != null) {
-                    rsaEntity.setOutputValue(new String(Hex.encodeHex(encryptedData)));
-                }
-
-            }
-        } catch (Exception e) {
-            this.outputValue.setText("参数异常，请检查");
-            throw new RuntimeException(e);
-        }
-        this.outputValue.setText(rsaEntity.getOutputValue());
-    }
-
-    /**
-     * decodeButton
-     * @param 
-     * @return void
-     * @Author: Kang on 2023/10/10 14:43
-     * 解密监听方法
-     */
-    private void decodeButton() {
-        try {
-            if (publicKeyRadio.isSelected()) {
-                this.outputValue.setText(rsaPublicKeyEncrypt.decodeWithPublicKey(rsaPublicKeyEncrypt.getPublicKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity));
-            }
-            if (privateKeyRadio.isSelected()) {
-                this.outputValue.setText(rsaPublicKeyEncrypt.decodeWithPrivateKey(rsaPublicKeyEncrypt.getPrivateKeyFromPEM(rsaEntity.getPublicKey()), rsaEntity));
-            }
-        } catch (Exception e) {
-            this.outputValue.setText("参数异常，请检查");
-            api.logging().logToError(e);
-        }
-    }
-
-    /**
      * setEntity
+     *
      * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:43
@@ -137,13 +108,26 @@ public class RsaEncryptUI {
         rsaEntity.setPublicKey(this.publicOrPrivate.getText());
         rsaEntity.setTextValue(this.textValue.getText());
 
-/*        if (this.padding.getSelectedIndex() == 0) {//PKCS1_PADDING
+        if (publicKeyRadio.isSelected()) {
+            rsaEntity.setSelectedRadio(true);//公钥加解密
+        }
+        if (privateKeyRadio.isSelected()) {
+            rsaEntity.setSelectedRadio(false);//私钥加解密
+        }
 
+        if (this.padding.getSelectedIndex() == 0) {//PKCS1_PADDING
+            rsaEntity.setPadding("PKCS1_PADDING");
         } else if (this.padding.getSelectedIndex() == 1) {//PKCS1_OAEP_PADDING
-
+            rsaEntity.setPadding("PKCS1_OAEP_PADDING");
         } else if (this.padding.getSelectedIndex() == 2) {//SSLV23_PADDING
+            rsaEntity.setPadding("SSLV23_PADDING");
+        }
 
-        }*/
+        if (outPut.getSelectedIndex() == 0) {
+            rsaEntity.setOutPut("0"); //base64
+        } else if (outPut.getSelectedIndex() == 1) {
+            rsaEntity.setOutPut("1"); //hex
+        }
 
         if (charset_Box.getSelectedIndex() == 0) {
             rsaEntity.setCharset("gb2312");
@@ -161,7 +145,8 @@ public class RsaEncryptUI {
 
     /**
      * ini
-     * @param 
+     *
+     * @param
      * @return void
      * @Author: Kang on 2023/10/10 14:43
      * 初始化
@@ -231,7 +216,7 @@ public class RsaEncryptUI {
         UI = new JPanel();
         UI.setLayout(new GridBagLayout());
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 9, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 10, new Insets(0, 0, 0, 0), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -264,7 +249,7 @@ public class RsaEncryptUI {
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        panel2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        panel2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-4519936)), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JLabel label4 = new JLabel();
         label4.setText("模式：");
         panel2.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -274,6 +259,9 @@ public class RsaEncryptUI {
         privateKeyRadio = new JRadioButton();
         privateKeyRadio.setText("私钥");
         panel2.add(privateKeyRadio, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        addIntruderButton = new JButton();
+        addIntruderButton.setText("添加Intruder");
+        panel1.add(addIntruderButton, new GridConstraints(0, 9, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 35), null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();
