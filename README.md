@@ -4,6 +4,16 @@
 <hr>
 
 <!-- readme: kang4me -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/kang4me">
+            <img src="https://avatars.githubusercontent.com/u/141841408?v=4" width="100;" alt="kang4me"/>
+            <br />
+            <sub><b>Kang</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: kang4me -end -->
 
 ### 使用环境
