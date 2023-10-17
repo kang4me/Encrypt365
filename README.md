@@ -14,6 +14,13 @@
             <br />
             <sub><b>Kang</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/peter5he1by">
+            <img src="https://avatars.githubusercontent.com/u/86906331?v=4" width="100;" alt="peter5he1by"/>
+            <br />
+            <sub><b>Peter</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: kang4me,peter5he1by -end -->
