@@ -1,6 +1,6 @@
 # Encrypt365
 
-### 贡献者
+## 贡献者
 <hr>
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
@@ -25,13 +25,13 @@
 </table>
 <!-- readme: kang4me,peter5he1by -end -->
 
-### 使用环境
+## 使用环境
 <hr>
 
 - 1.JDK ≥ 17
 - 2.BurpSuite ≥ v2023.1
 
-### 功能介绍
+## 功能介绍
 <hr>
 
     0. 最新更新，该插件特点可链式加解密
@@ -52,7 +52,7 @@
 
     n. 随缘更新...
 
-### 二开环境
+## 二开环境
 <hr>
 以下是作者开发环境：
     
@@ -64,26 +64,26 @@
     
     4. IntelliJ IDEA 2023.1
 
-### Intruder模块使用
+## Intruder模块使用
 <hr>
 
-#### 1. 没有参数的
+### 1. 没有参数的
 
 ![img.png](images/img2.jpg)
 
 ![img.png](images/img3.jpg)
 
-#### 2. 需要参数的
+### 2. 需要参数的
 
 ![img.png](images/img4.jpg)
 
 ![img.png](images/img5.jpg)
 
-#### 3. 结果附上
+### 3. 结果附上
 
 ![img.png](images/img8.jpg)
 
-### 插件界面
+## 插件界面
 <hr>
 
     鼠标左键单击+号来创建需要加解密模式的选项卡。
