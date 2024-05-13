@@ -99,4 +99,4 @@
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=kang4me/Encrypt365&type=Date)](https://star-history.com/#kang4me/Encrypt365&Date)
+![star.png](https://api.star-history.com/svg?repos=kang4me/Encrypt365&type=Date)
