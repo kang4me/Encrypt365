@@ -15,7 +15,7 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.logging.Logging;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.kang.burpApi.PayloadGeneratorProvider.HashPayloadProcessor;
+import com.kang.burpapi.PayloadGeneratorProvider.HashPayloadProcessor;
 import com.kang.config.ConfigFile;
 import com.kang.entity.HistoryEntity;
 import com.kang.entity.HashEntity;
@@ -124,6 +124,7 @@ public class HashUI {
      */
     public void iniFile() {
         configFile = new ConfigFile();
+        configFile.iniFile();
         md5_entity = configFile.getConfig(md5_entity);
         this.Email_text.setText(md5_entity.getEmail_text());
         this.Key_text.setText(md5_entity.getKey_text());
@@ -207,13 +208,13 @@ public class HashUI {
         gbc.insets = new Insets(5, 5, 5, 5);
         UI.add(panel1, gbc);
         JS1 = new JScrollPane();
-        panel1.add(JS1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(JS1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 150), null, 0, false));
         inputString_Text = new JTextArea();
         inputString_Text.setLineWrap(true);
         inputString_Text.setWrapStyleWord(true);
         JS1.setViewportView(inputString_Text);
         JS2 = new JScrollPane();
-        panel1.add(JS2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(JS2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 150), null, 0, false));
         outputString_Text = new JTextArea();
         outputString_Text.setLineWrap(true);
         outputString_Text.setWrapStyleWord(true);

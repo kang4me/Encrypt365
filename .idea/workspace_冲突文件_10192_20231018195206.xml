@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Encrypt365:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9a7185e8-eda8-491f-805f-9c3c5657622a" name="变更" comment="UI更新，功能更新。" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package-info" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="orign/master" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="73af2e31-e6e6-448f-8cad-a2e730c4ea5a" />
+        <option name="url" value="https://github.com/kang4me/Encrypt365.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="E:\apache-maven-3.5.0\maven_repository" />
+        <option name="useMavenConfig" value="true" />
+        <option name="userSettingsFile" value="E:\apache-maven-3.5.0\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2NSGDWJRhwY5jWSbXu1UhtT3HwC" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "323",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/BaiduSyncdisk/项目/Encrypt365",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDK",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.27471265",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\statics\images" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\AsymmetricCryptography\RsaPrivateEncrypt" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\AsymmetricCryptography" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\AsymmetricCryptography\RsaPublicKeyEncrypt" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Tools\项目\Encrypt365\src\main\resources" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\baseui" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\aesui" />
+      <recent name="D:\Tools\项目\Encrypt365\src\main\java\com\kang\view\md5ui" />
+      <recent name="D:\Tools\项目\Encrypt365\images" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn package" />
+    </option>
+  </component>
+  <component name="RunManager" selected="应用程序.com.kang.test.Test">
+    <configuration name="Test (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kang.test.Test" />
+      <module name="Encrypt365" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kang.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kang.test.Test" />
+      <module name="Encrypt365" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kang.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test (3)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kang.test.Test" />
+      <module name="Encrypt365" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kang.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kang.test.Test" />
+      <module name="Encrypt365" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kang.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.kang.test.Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kang.test.Test" />
+      <module name="Encrypt365" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kang.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test" type="Remote">
+      <module name="Encrypt365" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="50055" />
+      <option name="AUTO_RESTART" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="9a7185e8-eda8-491f-805f-9c3c5657622a" name="变更" comment="" />
+      <created>1679649954599</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679649954599</updated>
+      <workItem from="1679649956391" duration="691000" />
+      <workItem from="1680487157972" duration="10159000" />
+      <workItem from="1680528417969" duration="5244000" />
+      <workItem from="1680571090129" duration="19858000" />
+      <workItem from="1681181637386" duration="590000" />
+      <workItem from="1681436710338" duration="5013000" />
+      <workItem from="1681799894913" duration="175000" />
+      <workItem from="1681800080519" duration="35000" />
+      <workItem from="1681800174807" duration="121000" />
+      <workItem from="1681800306911" duration="1111000" />
+      <workItem from="1681801427101" duration="25000" />
+      <workItem from="1681801459454" duration="226000" />
+      <workItem from="1681802324754" duration="393000" />
+      <workItem from="1681802726023" duration="19000" />
+      <workItem from="1681802752877" duration="601000" />
+      <workItem from="1681803362071" duration="184000" />
+      <workItem from="1681803553692" duration="77000" />
+      <workItem from="1681803638957" duration="16000" />
+      <workItem from="1681803662310" duration="13000" />
+      <workItem from="1681803684371" duration="981000" />
+      <workItem from="1681804673260" duration="174000" />
+      <workItem from="1681804855323" duration="107000" />
+      <workItem from="1681804972830" duration="63000" />
+      <workItem from="1681805045215" duration="48000" />
+      <workItem from="1681805101320" duration="33000" />
+      <workItem from="1681805141510" duration="19000" />
+      <workItem from="1681805168412" duration="19000" />
+      <workItem from="1681805195690" duration="231000" />
+      <workItem from="1681805434750" duration="24000" />
+      <workItem from="1681805466466" duration="29000" />
+      <workItem from="1681805502754" duration="798000" />
+      <workItem from="1681869572101" duration="491000" />
+      <workItem from="1681870173150" duration="7341000" />
+      <workItem from="1681891508898" duration="88000" />
+      <workItem from="1681891605313" duration="56000" />
+      <workItem from="1681891669789" duration="1508000" />
+      <workItem from="1681896467223" duration="134000" />
+      <workItem from="1681896618642" duration="357000" />
+      <workItem from="1681897133832" duration="18000" />
+      <workItem from="1682045197331" duration="4427000" />
+      <workItem from="1682050624312" duration="18288000" />
+      <workItem from="1682138957675" duration="9080000" />
+      <workItem from="1682172661119" duration="3208000" />
+      <workItem from="1682212714782" duration="4378000" />
+      <workItem from="1682217271562" duration="4843000" />
+      <workItem from="1682237641560" duration="5081000" />
+      <workItem from="1682301505412" duration="108000" />
+      <workItem from="1682327318377" duration="1038000" />
+      <workItem from="1682410225640" duration="4846000" />
+      <workItem from="1682497211265" duration="1870000" />
+      <workItem from="1682500492451" duration="1324000" />
+      <workItem from="1682597974296" duration="49000" />
+      <workItem from="1689142131661" duration="180000" />
+      <workItem from="1693547059387" duration="13663000" />
+      <workItem from="1693791851695" duration="12506000" />
+      <workItem from="1693877894285" duration="3561000" />
+      <workItem from="1693885903807" duration="189000" />
+      <workItem from="1693886123968" duration="769000" />
+      <workItem from="1693886945700" duration="7000" />
+      <workItem from="1693887578531" duration="240000" />
+      <workItem from="1693888063201" duration="6834000" />
+      <workItem from="1693898392144" duration="4080000" />
+      <workItem from="1693902485699" duration="1420000" />
+      <workItem from="1693903921552" duration="113000" />
+      <workItem from="1693904044588" duration="1073000" />
+      <workItem from="1693905127832" duration="494000" />
+      <workItem from="1693905629134" duration="135000" />
+      <workItem from="1693965564132" duration="8135000" />
+      <workItem from="1693981119786" duration="11142000" />
+      <workItem from="1693993293913" duration="212000" />
+      <workItem from="1694049269766" duration="1332000" />
+      <workItem from="1694050648980" duration="1083000" />
+      <workItem from="1694051747021" duration="21340000" />
+      <workItem from="1694136372022" duration="8515000" />
+      <workItem from="1694146947170" duration="27000" />
+      <workItem from="1694146982365" duration="525000" />
+      <workItem from="1694147518023" duration="9684000" />
+      <workItem from="1694157673466" duration="7265000" />
+      <workItem from="1694235188836" duration="4625000" />
+      <workItem from="1694257461786" duration="147000" />
+      <workItem from="1694257640479" duration="2182000" />
+      <workItem from="1694334475627" duration="8507000" />
+      <workItem from="1694395539547" duration="15381000" />
+      <workItem from="1694415081453" duration="5443000" />
+      <workItem from="1694420545018" duration="4655000" />
+      <workItem from="1694483280171" duration="20238000" />
+      <workItem from="1694572627328" duration="19894000" />
+      <workItem from="1694658546434" duration="15704000" />
+      <workItem from="1694676443632" duration="7480000" />
+      <workItem from="1694740172955" duration="24845000" />
+      <workItem from="1694872539581" duration="6446000" />
+      <workItem from="1695000049472" duration="13695000" />
+      <workItem from="1695023859422" duration="5785000" />
+      <workItem from="1695086103712" duration="6850000" />
+      <workItem from="1695103275520" duration="8525000" />
+      <workItem from="1696657069865" duration="58000" />
+      <workItem from="1696657167349" duration="25000" />
+      <workItem from="1696731284783" duration="4382000" />
+      <workItem from="1696743688422" duration="9187000" />
+      <workItem from="1696837631750" duration="6193000" />
+      <workItem from="1696905987680" duration="538000" />
+      <workItem from="1696906918001" duration="1053000" />
+      <workItem from="1696907983953" duration="1663000" />
+      <workItem from="1696909660945" duration="12734000" />
+      <workItem from="1696986573889" duration="7263000" />
+      <workItem from="1697012668814" duration="197000" />
+      <workItem from="1697012875620" duration="646000" />
+      <workItem from="1697016392263" duration="387000" />
+      <workItem from="1697078966070" duration="1665000" />
+      <workItem from="1697211241423" duration="33000" />
+      <workItem from="1697211280385" duration="26000" />
+      <workItem from="1697211311834" duration="194000" />
+    </task>
+    <task id="LOCAL-00001" summary="初次提交">
+      <created>1694050094766</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1694050094766</updated>
+    </task>
+    <task id="LOCAL-00002" summary="初次提交">
+      <created>1694050707345</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1694050707345</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Initial commit">
+      <created>1694051998900</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1694051998900</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Initial commit">
+      <created>1694052114299</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1694052114299</updated>
+    </task>
+    <task id="LOCAL-00005" summary="初次提交">
+      <created>1694054330638</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1694054330638</updated>
+    </task>
+    <task id="LOCAL-00006" summary="初次提交">
+      <created>1694054367217</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1694054367217</updated>
+    </task>
+    <task id="LOCAL-00007" summary="结构更改">
+      <created>1694141247467</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1694141247467</updated>
+    </task>
+    <task id="LOCAL-00008" summary="结构更改">
+      <created>1694143510174</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1694143510175</updated>
+    </task>
+    <task id="LOCAL-00009" summary="结构更改">
+      <created>1694143608261</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1694143608261</updated>
+    </task>
+    <task id="LOCAL-00010" summary="包路径更改">
+      <created>1694143644459</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694143644459</updated>
+    </task>
+    <task id="LOCAL-00011" summary="包路径更改">
+      <created>1694147589802</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1694147589802</updated>
+    </task>
+    <task id="LOCAL-00012" summary="包路径更改">
+      <created>1694148318442</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1694148318442</updated>
+    </task>
+    <task id="LOCAL-00013" summary="包路径更改">
+      <created>1694148461346</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1694148461346</updated>
+    </task>
+    <task id="LOCAL-00014" summary="更新">
+      <created>1694162062046</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694162062046</updated>
+    </task>
+    <task id="LOCAL-00015" summary="更新">
+      <created>1694162247419</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1694162247419</updated>
+    </task>
+    <task id="LOCAL-00016" summary="更新">
+      <created>1694163266688</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1694163266688</updated>
+    </task>
+    <task id="LOCAL-00017" summary="更新">
+      <created>1694396436157</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1694396436157</updated>
+    </task>
+    <task id="LOCAL-00018" summary="README.md update">
+      <created>1694397142818</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1694397142818</updated>
+    </task>
+    <task id="LOCAL-00019" summary="更新">
+      <created>1694510154134</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1694510154134</updated>
+    </task>
+    <task id="LOCAL-00020" summary="update">
+      <created>1694593241666</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1694593241666</updated>
+    </task>
+    <task id="LOCAL-00021" summary="update">
+      <created>1694767913512</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1694767913513</updated>
+    </task>
+    <task id="LOCAL-00022" summary="update">
+      <created>1694768056572</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1694768056572</updated>
+    </task>
+    <task id="LOCAL-00023" summary="UI更新，功能更新。">
+      <created>1696921910578</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1696921910578</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="初次提交" />
+    <MESSAGE value="结构更改" />
+    <MESSAGE value="包路径更改" />
+    <MESSAGE value="包路径更改git ls-remote --tags" />
+    <MESSAGE value="README.md update" />
+    <MESSAGE value="更新" />
+    <MESSAGE value="update" />
+    <MESSAGE value="UI更新，功能更新。" />
+    <option name="LAST_COMMIT_MESSAGE" value="UI更新，功能更新。" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

@@ -13,7 +13,7 @@ package com.kang;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import com.google.inject.Guice;
-import com.kang.burpApi.contextMenuItemsProvider.Encrypt365ContextMenus;
+import com.kang.burpapi.contextMenuItemsProvider.Encrypt365ContextMenus;
 import com.kang.config.BillingModules;
 import com.kang.view.MainUI;
 
@@ -27,6 +27,7 @@ public class Encrypt365 implements BurpExtension {
         api.logging().logToOutput("===========================");
         api.logging().logToOutput("[+]  load successful!      ");
         api.logging().logToOutput("[+]  code by Kang          ");
+        api.logging().logToOutput("[+]  version v1.2          ");
         api.logging().logToOutput("===========================");
         MainUI mainUI = new MainUI( api, Guice.createInjector(new BillingModules()));
         //Tab面板

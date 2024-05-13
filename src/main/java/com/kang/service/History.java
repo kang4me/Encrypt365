@@ -16,6 +16,8 @@ public interface History {
     public void baseHistory(Injector injector);
     public void hashHistory(Injector injector);
     public void aesHistory(Injector injector);
+    public void desHistory(Injector injector);
     public void rsaCreateHistory(Injector injector);
     public void rsaEncryptHistory(Injector injector);
+    public void urlEncryptHistory(Injector injector);
 }

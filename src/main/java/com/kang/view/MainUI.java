@@ -10,22 +10,22 @@
 
 package com.kang.view;
 
-import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.kang.Encrypt365;
 import com.kang.entity.EnumEntity;
 import com.kang.view.rewrite.TabbedMenu;
 import com.kang.util.Utils;
-import com.kang.view.asymmetricCryptography.RsaCreate.RsaCreateUi;
-import com.kang.view.asymmetricCryptography.RsaEncrypt.RsaEncryptUI;
+import com.kang.view.asymmetricEncryption.RsaCreate.RsaCreateUi;
+import com.kang.view.asymmetricEncryption.RsaEncrypt.RsaEncryptUI;
 import com.kang.view.historyUi.historyUI;
-import com.kang.view.aesui.AesUI;
+import com.kang.view.symmetricalEncryption.aesui.AesUI;
 import com.kang.view.baseui.BaseUI;
 import com.kang.view.hashui.HashUI;
+import com.kang.view.symmetricalEncryption.desui.DesUI;
+import com.kang.view.urlui.urlUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,10 +40,13 @@ public class MainUI {
     public static int sequence = 1; // 序号
     private final JMenuItem base = new JMenuItem(EnumEntity.Base.name());
     private final JMenuItem hash = new JMenuItem(EnumEntity.Hash.name());
+    private final JMenu sy = new JMenu(EnumEntity.对称加解密.name());
     private final JMenuItem aes = new JMenuItem(EnumEntity.Aes.name());
+    private final JMenuItem des = new JMenuItem(EnumEntity.Des.name());
     private final JMenu ac = new JMenu(EnumEntity.非对称加解密.name());
     private final JMenuItem rsaEncrypt = new JMenuItem(EnumEntity.Rsa加解密.name());
     private final JMenuItem rsaCreate = new JMenuItem(EnumEntity.Rsa生成.name());
+    private final JMenuItem url = new JMenuItem(EnumEntity.Url编码.name());
     @Inject
     private historyUI history;
     public Injector injector;
@@ -76,11 +79,17 @@ public class MainUI {
         aes.addActionListener(e -> {
             addTable(new AesUI(api, injector).UI, EnumEntity.Aes$.name());
         });
+        des.addActionListener(e -> {
+            addTable(new DesUI(api, injector).UI, EnumEntity.Des$.name());
+        });
         rsaEncrypt.addActionListener(e -> {
             addTable(new RsaEncryptUI(api, injector).UI, EnumEntity.Rsa加解密$.name());
         });
         rsaCreate.addActionListener(e -> {
             addTable(new RsaCreateUi(api, injector).UI, EnumEntity.Rsa生成$.name());
+        });
+        url.addActionListener(e -> {
+            addTable(new urlUI(api, injector).UI, EnumEntity.Url$.name());
         });
 
         //选项卡右键菜单
@@ -174,6 +183,7 @@ public class MainUI {
     public void init() {
         uiList.addTab("历史", history.UI);
         uiList.addTab("+", new JPanel());
+        //uiList.setUI(new CustomTabbedPaneUI());
         //给uiList.addTab("+", new JPanel());添加图片
         ImageIcon closeImage = Utils.loadImage("images/add.png", 17, 17);
         JPanel tabTitle = new JPanel();
@@ -185,13 +195,16 @@ public class MainUI {
 
         uiList.setTabComponentAt(uiList.getTabCount() - 1, tabTitle);
         uiList.setEnabledAt(1, false);
-
+        sy.add(aes);
+        sy.add(des);
         ac.add(rsaEncrypt);
         ac.add(rsaCreate);
         popup.add(base);
         popup.add(hash);
-        popup.add(aes);
+        popup.add(sy);
         popup.add(ac);
+        popup.add(url);
+
     }
 
     {

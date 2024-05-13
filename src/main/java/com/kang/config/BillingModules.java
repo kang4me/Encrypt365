@@ -32,6 +32,10 @@ public class BillingModules extends AbstractModule {
         //bind(AesEncrypt.class).to(AesEncryptImpl.class).in(Scopes.SINGLETON);
         bind(RsaCreate.class).to(RsaCreateImpl.class).in(Scopes.SINGLETON);
         bind(RsaEncrypt.class).to(RsaEncryptImpl.class).in(Scopes.SINGLETON);
+        bind(UrlEncrypt.class).to(UrlEncryptImpl.class).in(Scopes.SINGLETON);
+
+
+
         bind(History.class).to(HistoryImpl.class);
         bind(HistoryEntity.class).in(Scopes.SINGLETON);
         bind(historyUI.class).in(Scopes.SINGLETON);

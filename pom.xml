@@ -82,12 +82,12 @@
             <artifactId>montoya-api</artifactId>
             <version>2023.8</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.jasypt/jasypt &ndash;&gt;
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
             <version>1.9.3</version>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-crypto -->
         <dependency>
             <groupId>cn.hutool</groupId>

@@ -50,6 +50,8 @@
 
     6. 支持历史记录查看
 
+    7. 支持URL编码/解码
+
     n. 随缘更新...
 
 ## 二开环境
@@ -93,3 +95,8 @@
 ![img.png](images/img6.jpg)
 
 ![img.png](images/img7.jpg)
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kang4me/Encrypt365&type=Date)](https://star-history.com/#kang4me/Encrypt365&Date)

@@ -14,11 +14,13 @@ public enum EnumEntity {
     Base,
     Hash,
     Aes,
+    Des,
     RsaEncrypt,
     RsaCreate,
     Base$,
     Hash$,
     Aes$,
+    Des$,
     Rsa加解密$,
     Rsa生成$,
     Rsa加解密,
@@ -29,6 +31,8 @@ public enum EnumEntity {
     非对称加解密,
     log,
     所有,
-
+    对称加解密,
+    Url编码,
+    Url$,
 
 }

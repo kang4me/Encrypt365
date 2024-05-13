@@ -23,7 +23,9 @@
         <children>
           <scrollpane id="f87b" binding="JS1">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="150"/>
+              </grid>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -39,7 +41,9 @@
           </scrollpane>
           <scrollpane id="46192" binding="JS2">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="150"/>
+              </grid>
             </constraints>
             <properties/>
             <border type="none"/>

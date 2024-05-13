@@ -10,7 +10,6 @@
 
 package com.kang.service.Impl;
 
-import com.kang.entity.BaseEntity;
 import com.kang.entity.RsaEntity;
 import com.kang.service.RsaEncrypt;
 import org.apache.commons.codec.binary.Base64;

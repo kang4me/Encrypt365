@@ -16,9 +16,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.kang.burpApi.PayloadGeneratorProvider.BasePayloadProcessor;
+import com.kang.burpapi.PayloadGeneratorProvider.BasePayloadProcessor;
 import com.kang.entity.BaseEntity;
-import com.kang.entity.EnumEntity;
 import com.kang.entity.HistoryEntity;
 import com.kang.service.BaseEncrypt;
 import com.kang.service.History;
@@ -71,6 +70,7 @@ public class BaseUI {
             historyEntity.setBaseEntity(baseEntity);
             history.baseHistory(injector);
         });
+
         this.addIntruder.addActionListener((e) -> {
             String extName = JOptionPane.showInputDialog("请自定义Intruder名称:Encrypt365-*");
             if (extName != null) {

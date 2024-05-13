@@ -75,14 +75,28 @@ public class historyUI {
                 }
                 case 4 -> {
                     for (Object[] objects : historyEntity.data) {
-                        if (objects[1].toString().equals("Rsa加解密")) {
+                        if (objects[1].toString().equals("Des")) {
                             all.insertRow(0, objects);
                         }
                     }
                 }
                 case 5 -> {
                     for (Object[] objects : historyEntity.data) {
+                        if (objects[1].toString().equals("Rsa加解密")) {
+                            all.insertRow(0, objects);
+                        }
+                    }
+                }
+                case 6 -> {
+                    for (Object[] objects : historyEntity.data) {
                         if (objects[1].toString().equals("Rsa生成")) {
+                            all.insertRow(0, objects);
+                        }
+                    }
+                }
+                case 7 -> {
+                    for (Object[] objects : historyEntity.data) {
+                        if (objects[1].toString().equals("Url编码")) {
                             all.insertRow(0, objects);
                         }
                     }
@@ -110,8 +124,10 @@ public class historyUI {
         dlm.addElement(EnumEntity.Base);
         dlm.addElement(EnumEntity.Hash);
         dlm.addElement(EnumEntity.Aes);
+        dlm.addElement(EnumEntity.Des);
         dlm.addElement(EnumEntity.Rsa加解密);
         dlm.addElement(EnumEntity.Rsa生成);
+        dlm.addElement(EnumEntity.Url编码);
 
         list1.setModel(dlm);
         list1.setSelectedIndex(0);

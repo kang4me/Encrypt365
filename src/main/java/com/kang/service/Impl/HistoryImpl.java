@@ -112,7 +112,36 @@ public class HistoryImpl implements History {
                 DateUtils.date()});
         historyEntity.id++;
     }
-    
+
+    /**
+     * desHistory
+     * @param injector
+     * @return void
+     * @Author: Kang on 2023/10/27 14:30
+     */
+    public void desHistory(Injector injector){
+        history = injector.getInstance(historyUI.class);
+        historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getDesEntity().getInputValue().isEmpty() && historyEntity.getDesEntity().getOutputValue().isEmpty()){
+            return;
+        }
+        history.all.insertRow(0,new Object[]{
+                historyEntity.id,
+                EnumEntity.Des,
+                historyEntity.getDesEntity().getInputValue(),
+                historyEntity.getDesEntity().getOutputValue(),
+                historyEntity.getDesEntity().getKey(),
+                DateUtils.date()});
+        historyEntity.data.add(new Object[]{
+                historyEntity.id,
+                EnumEntity.Des,
+                historyEntity.getDesEntity().getInputValue(),
+                historyEntity.getDesEntity().getOutputValue(),
+                historyEntity.getDesEntity().getKey(),
+                DateUtils.date()});
+        historyEntity.id++;
+    }
+
     /**
      * rsaCreateHistory
      * @param injector
@@ -170,4 +199,29 @@ public class HistoryImpl implements History {
                 DateUtils.date()});
         historyEntity.id++;
     }
+
+    @Override
+    public void urlEncryptHistory(Injector injector) {
+        history = injector.getInstance(historyUI.class);
+        historyEntity = injector.getInstance(HistoryEntity.class);
+        if(historyEntity.getUrlEntity().getInputString().isEmpty() && historyEntity.getUrlEntity().getOutputString().isEmpty()){
+            return;
+        }
+        history.all.insertRow(0,new Object[]{
+                historyEntity.id,
+                EnumEntity.Url编码,
+                historyEntity.getUrlEntity().getInputString(),
+                historyEntity.getUrlEntity().getOutputString(),
+                "",
+                DateUtils.date()});
+        historyEntity.data.add(new Object[]{
+                historyEntity.id,
+                EnumEntity.Url编码,
+                historyEntity.getUrlEntity().getInputString(),
+                historyEntity.getUrlEntity().getOutputString(),
+                "",
+                DateUtils.date()});
+        historyEntity.id++;
+    }
+
 }

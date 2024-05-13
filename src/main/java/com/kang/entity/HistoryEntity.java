@@ -20,6 +20,8 @@ public class HistoryEntity {
     private BaseEntity baseEntity;
     private HashEntity md5Entity;
     private RsaEntity rsaEntity;
+    private DesEntity desEntity;
+    private UrlEntity urlEntity;
 
     public AesEntity getAesEntity() {
         return aesEntity;
@@ -51,5 +53,21 @@ public class HistoryEntity {
 
     public void setRsaEntity(RsaEntity rsaEntity) {
         this.rsaEntity = rsaEntity;
+    }
+
+    public DesEntity getDesEntity() {
+        return desEntity;
+    }
+
+    public void setDesEntity(DesEntity desEntity) {
+        this.desEntity = desEntity;
+    }
+
+    public UrlEntity getUrlEntity() {
+        return urlEntity;
+    }
+
+    public void setUrlEntity(UrlEntity urlEntity) {
+        this.urlEntity = urlEntity;
     }
 }

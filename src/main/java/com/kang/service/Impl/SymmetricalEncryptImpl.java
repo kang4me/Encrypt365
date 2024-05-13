@@ -1,0 +1,151 @@
+/*
+ * @Author: Kang
+ * @Version: 1.0
+ * Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
+package com.kang.service.Impl;
+
+import cn.hutool.crypto.symmetric.DES;
+import com.kang.entity.AesEntity;
+import com.kang.entity.DesEntity;
+import com.kang.service.SymmetricalEncrypt;
+import cn.hutool.crypto.Mode;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
+
+import java.nio.charset.Charset;
+
+public class SymmetricalEncryptImpl implements SymmetricalEncrypt {
+    private AesEntity aes_entity;
+    private DesEntity des_entity;
+    private AES aes;
+    private DES des;
+
+    public SymmetricalEncryptImpl(AesEntity aes_entity) {
+        SecureUtil.disableBouncyCastle();
+        this.aes_entity = aes_entity;
+        if (aes_entity.getMode() == Mode.ECB) {
+            aes = new AES(aes_entity.getMode(), aes_entity.getPadding(), padKeyTo128_192_256Bits(aes_entity.getKey(),aes_entity.getCharset()));
+        }else {
+            aes = new AES(aes_entity.getMode(), aes_entity.getPadding(), padKeyTo128_192_256Bits( aes_entity.getKey(),aes_entity.getCharset()),padKeyTo128_192_256Bits( aes_entity.getIv(),aes_entity.getCharset()));
+        }
+    }
+
+    public SymmetricalEncryptImpl(DesEntity des_entity) {
+        SecureUtil.disableBouncyCastle();
+        this.des_entity = des_entity;
+        if (des_entity.getKey().isEmpty()){
+            des = new DES(des_entity.getMode(),des_entity.getPadding());
+        } else if (des_entity.getIv().isEmpty()) {
+            des = new DES(des_entity.getMode(),des_entity.getPadding(), padKeyTo128_192_256Bits(des_entity.getKey(),des_entity.getCharset()));
+        }else {
+            des = new DES(des_entity.getMode(),des_entity.getPadding(),padKeyTo128_192_256Bits(des_entity.getKey(),des_entity.getCharset()), padKeyTo128_192_256Bits(des_entity.getIv(),des_entity.getCharset()));
+        }
+    }
+
+
+    /**
+     * 采用第三方库hutool
+     * @return
+     */
+    public byte[] AES_Encrypt_all(){
+        return aes.encrypt(aes_entity.getInputValue().getBytes(Charset.forName(aes_entity.getCharset())));
+    }
+
+    /**
+     * 采用第三方库hutool
+     * @return
+     */
+    public String AES_Decrypt_all(){
+        return new String(aes.decrypt(aes_entity.getInputValue()), Charset.forName(aes_entity.getCharset()));
+    }
+
+    /**
+     * 采用第三方库hutool
+     * @return
+     */
+    public byte[] DES_Encrypt_all(){
+        return des.encrypt(des_entity.getInputValue().getBytes(Charset.forName(des_entity.getCharset())));
+    }
+
+    /**
+     * 采用第三方库hutool
+     * @return
+     */
+    public String DES_Decrypt_all(){
+        return new String(des.decrypt(des_entity.getInputValue()), Charset.forName(des_entity.getCharset()));
+    }
+
+    /**
+     * padKeyTo128_192_256Bits
+     * @param originalKey
+     * @return byte[]
+     * @Author: Kang on 2023/10/10 14:16
+     * 数据位数选择
+     */
+    public byte[] padKeyTo128_192_256Bits(String originalKey,String charset) {
+        byte[] keyBytes = originalKey.getBytes(Charset.forName(charset));
+        int size = 0;
+        // 创建一个16字节的数组，用于存储填充后的秘钥
+        if(keyBytes.length <= 16){
+            size = 16;
+        } else if (keyBytes.length <= 24) {
+            size = 24;
+        } else if (keyBytes.length <= 32) {
+            size = 32;
+        }
+        byte[] paddedKey = new byte[size];
+        // 将原始秘钥的字节循环复制到填充后的秘钥数组，同时处理超出16字节长度的情况
+        for (int i = 0; i < size; i++) {
+            if (i < keyBytes.length) {
+                paddedKey[i] = keyBytes[i];
+            } else {
+                paddedKey[i] = (byte) 0x00; // 使用0x00填充
+            }
+        }
+        return paddedKey;
+    }
+
+    /**
+     * 封印
+     */
+/*    //PKCS7Padding
+    public byte[] AES_ECB_PKCS7_encrypt(String input, String key, int size){
+        byte[] crypted = null;
+        try {
+            SecretKeySpec skey = new SecretKeySpec(padKeyTo128_192_256Bits( key, size), "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, skey);
+            crypted = cipher.doFinal(input.getBytes(CHARSET));
+        } catch (Exception e) {
+            //api.logging().logToError(e+"\n该问题暂时无法处理");
+            e.printStackTrace();
+        }
+        return crypted;
+    }
+
+    //PKCS7Padding
+    public String AES_ECB_PKCS7_decrypt(byte[] input, String key, int size) {
+        byte[] output = null;
+        try {
+            SecretKeySpec skey = new SecretKeySpec(padKeyTo128_192_256Bits( key, size), "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            cipher.init(Cipher.DECRYPT_MODE, skey);
+            output = cipher.doFinal(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new String(output);
+    }*/
+    /**
+     * 封印；
+     */
+
+
+
+}
